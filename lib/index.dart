@@ -54,8 +54,8 @@ class IndexPageState extends State<IndexPage> {
               List<DateTime?> uniDifference =
                   uni2.where((element) => !uni1.contains(element)).toList();
 
-              print("uni1 $uni1");
-              print("uni2 $uni2");
+              //print("uni1 $uni1");
+              //print("uni2 $uni2");
               if (uniDifference.isNotEmpty) {
                 await Tools.httpPost({
                   'v': '1',
