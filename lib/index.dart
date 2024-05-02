@@ -59,9 +59,9 @@ class IndexPageState extends State<IndexPage> {
               if (uniDifference.isNotEmpty) {
                 await Tools.httpPost({
                   'v': '1',
-                  'getDatesAppointments': '2',
+                  'getDatesAppointmentsSpecDate': '2',
                   'dateFrom':
-                      "${uniDifference[0]!.year}-${uniDifference[0]!.month}-${uniDifference[0]!.day}"
+                      "${uniDifference[0]!.year}${uniDifference[0]!.month.toString().padLeft(2, '0')}${uniDifference[0]!.day.toString().padLeft(2, '0')}"
                 }).then((value) {
                   setState(() {
                     items = jsonDecode(value.body);
@@ -81,8 +81,9 @@ class IndexPageState extends State<IndexPage> {
 
     Tools.httpPost({
       'v': '1',
-      'getDatesAppointments': '2',
-      'dateFrom': "${today.year}-${today.month}-${today.day}"
+      'getDatesAppointmentsMoreThanDate': '2',
+      'dateFrom':
+          "${today.year}${today.month.toString().padLeft(2, '0')}${today.day.toString().padLeft(2, '0')}"
     }).then((value) {
       setState(() {
         print("eeee-init ${value.body}");

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:webclient/calendar.dart';
+import 'package:webclient/h.dart';
 import 'package:webclient/index.dart';
 import 'package:webclient/settings.dart';
-
-import 'h.dart';
 
 void main() {
   runApp(const MyApp());
@@ -50,7 +49,7 @@ class MyHomePageState extends State<MyHomePage> {
                 flexibleSpace: FlexibleSpaceBar(
                     centerTitle: false,
                     collapseMode: CollapseMode.parallax,
-                    title: const Text("Welcome",
+                    title: Text("Welcome ${Site.domain}",
                         textAlign: TextAlign.center,
                         style: TextStyle(color: Colors.white, fontSize: 16.0)),
                     background: Image.network(
@@ -76,9 +75,6 @@ class MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(Site.domain),
-      ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
