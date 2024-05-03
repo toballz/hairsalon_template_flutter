@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:webclient/h.dart';
+import 'package:webclient/profileedit.dart';
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -9,15 +11,16 @@ class SettingsPage extends StatefulWidget {
 }
 
 class SettingsPageState extends State<SettingsPage> {
-  bool _isDark = false;
+  bool notifications = false;
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: _isDark ? ThemeData.dark() : ThemeData.light(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text("Settings"),
-        ),
+    return Scaffold(
+        appBar: AppBar(title: Text(Site.domain)),
         body: Center(
           child: Container(
             constraints: const BoxConstraints(maxWidth: 400),
@@ -27,58 +30,99 @@ class SettingsPageState extends State<SettingsPage> {
                   title: "General",
                   children: [
                     _CustomListTile(
-                        title: "Dark Mode",
-                        icon: Icons.dark_mode_outlined,
-                        trailing: Switch(
-                            value: _isDark,
-                            onChanged: (value) {
-                              setState(() {
-                                _isDark = value;
-                              });
-                            })),
-                    _CustomListTile(
                         title: "Notifications",
                         icon: Icons.notifications_active_outlined,
                         trailing: Switch(
-                            value: _isDark,
+                            value: notifications,
                             onChanged: (value) {
                               setState(() {
-                                //_isDark = value;
+                                notifications = !notifications;
                               });
-                            })),
-                    const _CustomListTile(
+                            }),
+                        onclick: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ProfileEditPage()));
+                        }),
+                    _CustomListTile(
                         title: "Security Status",
-                        icon: CupertinoIcons.lock_shield),
+                        icon: CupertinoIcons.lock_shield,
+                        onclick: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ProfileEditPage(),
+                              ));
+                        }),
                   ],
                 ),
                 const Divider(),
-                const _SingleSection(
-                  title: "Organization",
+                _SingleSection(
+                  title: "Personal",
                   children: [
                     _CustomListTile(
-                        title: "Profile", icon: Icons.person_outline_rounded),
+                        title: "Profile",
+                        icon: Icons.person_outline_rounded,
+                        onclick: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ProfileEditPage(),
+                              ));
+                        }),
                     _CustomListTile(
-                        title: "Messaging", icon: Icons.message_outlined)
+                        title: "Messaging",
+                        icon: Icons.message_outlined,
+                        onclick: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ProfileEditPage(),
+                              ));
+                        })
                   ],
                 ),
                 const Divider(),
-                const _SingleSection(
+                _SingleSection(
                   children: [
                     _CustomListTile(
                         title: "Help & Feedback",
-                        icon: Icons.help_outline_rounded),
+                        icon: Icons.help_outline_rounded,
+                        onclick: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ProfileEditPage(),
+                              ));
+                        }),
                     _CustomListTile(
-                        title: "About", icon: Icons.info_outline_rounded),
+                        title: "About",
+                        icon: Icons.info_outline_rounded,
+                        onclick: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ProfileEditPage(),
+                              ));
+                        }),
                     _CustomListTile(
-                        title: "Sign out", icon: Icons.exit_to_app_rounded),
+                        title: "Sign out",
+                        icon: Icons.exit_to_app_rounded,
+                        onclick: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ProfileEditPage(),
+                              ));
+                        }),
                   ],
                 ),
               ],
             ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }
 
@@ -86,9 +130,14 @@ class _CustomListTile extends StatelessWidget {
   final String title;
   final IconData icon;
   final Widget? trailing;
-  const _CustomListTile(
-      {Key? key, required this.title, required this.icon, this.trailing})
-      : super(key: key);
+  final void Function() onclick;
+  const _CustomListTile({
+    Key? key,
+    required this.title,
+    required this.icon,
+    this.trailing,
+    required this.onclick,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -96,7 +145,7 @@ class _CustomListTile extends StatelessWidget {
       title: Text(title),
       leading: Icon(icon),
       trailing: trailing,
-      onTap: () {},
+      onTap: onclick,
     );
   }
 }

@@ -49,7 +49,6 @@ class IndexPageState extends State<IndexPage> {
               int.parse(value['year']),
               int.parse(value['month']),
               int.parse(value['day'])));
-          //print("${value['year']} ${value['month']} ${value['day']}");
         }
       });
     });
@@ -107,42 +106,46 @@ class IndexPageState extends State<IndexPage> {
           title: const Text("View Appointments"),
         ),
         body: Center(
-            child: Container(
-          constraints: const BoxConstraints(maxWidth: 400),
-          child: SingleChildScrollView(
-              child: Column(
-            children: [
-              _buildDefaultMultiDatePickerWithValue(),
-              const SizedBox(height: 10),
-              SizedBox(
-                  height: 500,
-                  child: ListView.builder(
-                      itemCount: items.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return ListTile(
-                            leading: Image(
-                              image: NetworkImage(items[index]['imageUrl']!),
-                              width: 56, // Set the width of the image
-                              height: 650, // Set the height of the image
-                            ),
-                            title: Text(items[index]['hairname']!),
-                            subtitle: Text(items[index]['datetime']!),
-                            trailing: const Icon(Icons.access_alarms_outlined),
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ReceiptPage(
-                                        receiptId: items[index]['orderId']!,
-                                        dateScheduled: items[index]
-                                            ['datetime']!)),
-                              );
-                            });
-                      })),
-              const SizedBox(height: 10),
-            ],
-          )),
-        )),
+            child: SingleChildScrollView(
+                physics: NeverScrollableScrollPhysics(),
+                child: Container(
+                  constraints: const BoxConstraints(maxWidth: 400),
+                  child: Column(
+                    children: [
+                      _buildDefaultMultiDatePickerWithValue(),
+                      SizedBox(
+                          height: (items.length *
+                              (MediaQuery.of(context).size.height * 0.1)),
+                          child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: items.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return ListTile(
+                                    leading: Image(
+                                        image: NetworkImage(
+                                            items[index]['imageUrl']!),
+                                        width: 56,
+                                        height: 650),
+                                    title: Text(items[index]['hairname']!),
+                                    subtitle: Text(items[index]['datetime']!),
+                                    trailing: const Icon(
+                                        Icons.access_alarms_outlined),
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => ReceiptPage(
+                                                receiptId: items[index]
+                                                    ['orderId']!,
+                                                dateScheduled: items[index]
+                                                    ['datetime']!)),
+                                      );
+                                    });
+                              })),
+                      const SizedBox(height: 10),
+                    ],
+                  ),
+                ))),
       ),
     );
   }

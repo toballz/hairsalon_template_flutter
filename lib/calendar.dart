@@ -21,40 +21,50 @@ class CalendarPageState extends State<CalendarPage> {
   TextEditingController thursdayController = TextEditingController();
   TextEditingController fridayController = TextEditingController();
   TextEditingController saturdayController = TextEditingController();
+  TextEditingController overrideController = TextEditingController();
 
   //
+  List<dynamic> overridedDates = [];
   //
   List<DateTime?> _rangeDatePickerValueWithDefaultValue = [
     DateTime(2024, 5, 6),
-    DateTime(2024, 5, 21),
+    DateTime(2024, 5, 6),
   ];
-//
+//4
+
+  void getWeeklyANDOverrideDates() async {
+    var weeklyDatesResponse =
+        await Tools.httpPost({'v': '1', 'getweeklyStatic': '2', 'had': "a"});
+    var weeklyDatesJson = jsonDecode(weeklyDatesResponse.body);
+
+    var overRideResponse =
+        await Tools.httpPost({'v': '1', 'getOverrideDates': '2', 'va': "a"});
+    var overRideJson = jsonDecode(overRideResponse.body);
+    setState(() {
+      sundayController.text = weeklyDatesJson['sunday'];
+      mondayController.text = weeklyDatesJson['monday'];
+      tuesdayController.text = weeklyDatesJson['tuesday'];
+      wednesdayController.text = weeklyDatesJson['wednesday'];
+      thursdayController.text = weeklyDatesJson['thursday'];
+      fridayController.text = weeklyDatesJson['friday'];
+      saturdayController.text = weeklyDatesJson['saturday'];
+      //
+      //
+      overridedDates = overRideJson as List<dynamic>;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-
-    Tools.httpPost({'v': '1', 'getweeklyStatic': '2', 'had': "a"})
-        .then((value) {
-      var ttt = jsonDecode(value.body);
-      setState(() {
-        sundayController.text = ttt['sunday'];
-        mondayController.text = ttt['monday'];
-        tuesdayController.text = ttt['tuesday'];
-        wednesdayController.text = ttt['wednesday'];
-        thursdayController.text = ttt['thursday'];
-        fridayController.text = ttt['friday'];
-        saturdayController.text = ttt['saturday'];
-      });
-    });
+    getWeeklyANDOverrideDates();
   }
 //
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Set Availability ${Site.domain}"),
-        ),
+        appBar: AppBar(title: Text(Site.domain)),
         body: Center(
             child: Container(
           constraints: const BoxConstraints(maxWidth: 400),
@@ -111,10 +121,12 @@ class CalendarPageState extends State<CalendarPage> {
       SizedBox(width: xx),
       Expanded(
           child: TextField(
+              style: const TextStyle(color: Colors.deepOrangeAccent),
               controller: textcontrolller,
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
                   hintText: '1200-1500 1400-1600',
+                  hintStyle: TextStyle(color: Colors.grey),
                   contentPadding: EdgeInsets.all(12)))),
     ]);
   }
@@ -142,34 +154,27 @@ class CalendarPageState extends State<CalendarPage> {
         ),
 
         //sunday
-        buildDayRow("Sunday", sundayController, 30),
+        buildDayRow("Sunday", sundayController, 27),
         //Monday
-        buildDayRow("Monday", mondayController, 25),
+        buildDayRow("Monday", mondayController, 23),
         //Tuesday
         buildDayRow("Tuesday", tuesdayController, 20),
         //Wednesday
         buildDayRow("Wednesday", wednesdayController, 0),
         //Thursday
-        buildDayRow("Thursday", thursdayController, 15),
+        buildDayRow("Thursday", thursdayController, 13),
         //friday
         buildDayRow("Friday", fridayController, 35),
         //saturday
-        buildDayRow("Saturday", saturdayController, 20),
+        buildDayRow("Saturday", saturdayController, 16),
 
         const SizedBox(height: 15),
         ElevatedButton(
-            style: ButtonStyle(
-                padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                  const EdgeInsets.only(
-                      left: 32, right: 32, top: 16, bottom: 16),
-                ),
-                textStyle: MaterialStateProperty.all<TextStyle>(
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-                foregroundColor:
-                    MaterialStateProperty.all<Color>(Colors.white)),
+            style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.all(14),
+                minimumSize: const Size.fromHeight(40)),
             onPressed: () {},
-            child: const Text("Save These Dates...")),
+            child: const Text("Save weekly Dates...")),
         const SizedBox(height: 35)
       ],
     );
@@ -201,21 +206,47 @@ class CalendarPageState extends State<CalendarPage> {
           onValueChanged: (dates) =>
               setState(() => _rangeDatePickerValueWithDefaultValue = dates),
         ),
-        const SizedBox(height: 10),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text('Selection(s):  '),
-            const SizedBox(width: 10),
-            Text(
-              _getValueText(
-                config.calendarType,
-                _rangeDatePickerValueWithDefaultValue,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 25),
+        const Text('Enter override time(s), leave empty for the whole day'),
+        TextField(
+            controller: overrideController,
+            decoration: const InputDecoration(
+                hintText: "1200, 1400, 1430-1500",
+                hintStyle: TextStyle(color: Colors.grey),
+                contentPadding: EdgeInsets.all(12))),
+        const SizedBox(height: 12),
+        SizedBox(
+            height: (overridedDates.length *
+                (MediaQuery.of(context).size.height * 0.1)),
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: overridedDates.length,
+              itemBuilder: (BuildContext context, int index) {
+                return ListTile(
+                  leading:
+                      const Icon(Icons.lock_clock_outlined), // Icon on the left
+                  title: Text("Date: ${overridedDates[index]['date']!}"),
+                  subtitle: Text("Time: ${overridedDates[index]['time']!}"),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete_outline),
+                    onPressed: () {
+                      setState(() {
+                        overridedDates.removeWhere((map) =>
+                            map['date'] == overridedDates[index]['date']! &&
+                            map['time'] == overridedDates[index]['time']!);
+                      });
+                    },
+                  ),
+                  onTap: () {},
+                );
+              },
+            )),
+        ElevatedButton(
+            onPressed: () {},
+            style: ElevatedButton.styleFrom(
+                minimumSize: const Size.fromHeight(40),
+                padding: const EdgeInsets.all(14)),
+            child: const Text("Save Override")),
+        const SizedBox(height: 25)
       ],
     );
   }
