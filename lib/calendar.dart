@@ -176,11 +176,29 @@ class CalendarPageState extends State<CalendarPage> {
         const SizedBox(height: 15),
         ElevatedButton(
             style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.all(14),
-                minimumSize: const Size.fromHeight(40)),
-            onPressed: () {},
-            child: const Text("Save weekly Dates...")),
-        const SizedBox(height: 35)
+                padding: const EdgeInsets.all(19),
+                minimumSize: const Size.fromHeight(19),
+                backgroundColor: Colors.deepOrangeAccent),
+            onPressed: () async {
+              Map<String, dynamic> aasaa = {};
+              aasaa['sunday'] = sundayController.text;
+              aasaa['monday'] = mondayController.text;
+              aasaa['tuesday'] = tuesdayController.text;
+              aasaa['wednesday'] = wednesdayController.text;
+              aasaa['thursday'] = thursdayController.text;
+              aasaa['friday'] = fridayController.text;
+              aasaa['saturday'] = saturdayController.text;
+              //
+              await Tools.httpPost(
+                  {'v': '1', 'updatesWeekly': jsonEncode(aasaa), 'ajr': "a"});
+              setState(() {});
+              //
+            },
+            child: const Text(
+              "Save weekly Dates...",
+              style: TextStyle(color: Colors.white),
+            )),
+        const SizedBox(height: 29)
       ],
     );
   }
@@ -248,12 +266,17 @@ class CalendarPageState extends State<CalendarPage> {
                 );
               },
             )),
+        const SizedBox(height: 35),
         ElevatedButton(
             onPressed: () {},
             style: ElevatedButton.styleFrom(
-                minimumSize: const Size.fromHeight(40),
-                padding: const EdgeInsets.all(14)),
-            child: const Text("Add Override")),
+                minimumSize: const Size.fromHeight(19),
+                padding: const EdgeInsets.all(19),
+                backgroundColor: Colors.teal[800]),
+            child: const Text(
+              "Add Override",
+              style: TextStyle(color: Colors.white),
+            )),
         const SizedBox(height: 25)
       ],
     );

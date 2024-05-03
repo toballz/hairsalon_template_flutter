@@ -52,18 +52,20 @@ class ReceiptPageState extends State<ReceiptPage> {
             children: [
               Image(
                   image: NetworkImage(
-                      "http://${Site.imgDomain}/img/${(receiptInfo != null) ? receiptInfo!['image'] : "1"}.jpg?.12"),
+                      "http://${Site.imgDomain}/img/${(receiptInfo != null) ? receiptInfo!['image'] : "nuul"}.jpg?.12"),
                   height: 320),
               const SizedBox(height: 20),
               Row(children: [
-                const Text("Name:      "),
+                const Text("Name:      ",
+                    style: TextStyle(fontWeight: FontWeight.w600)),
                 Text((receiptInfo != null)
                     ? receiptInfo!['customername'].toString().trim()
                     : "xxxxx xxxxxx")
               ]),
               const SizedBox(height: 10),
               Row(children: [
-                const Text("Phone:  "),
+                const Text("Phone:  ",
+                    style: TextStyle(fontWeight: FontWeight.w600)),
                 TextButton(
                     onPressed: () async {
                       Clipboard.setData(ClipboardData(
@@ -83,7 +85,8 @@ class ReceiptPageState extends State<ReceiptPage> {
                         : "(xxx) xxx-xxxx"))
               ]),
               Row(children: [
-                const Text("Email:    "),
+                const Text("Email:    ",
+                    style: TextStyle(fontWeight: FontWeight.w600)),
                 TextButton(
                     onPressed: () async {
                       Clipboard.setData(ClipboardData(
@@ -104,24 +107,28 @@ class ReceiptPageState extends State<ReceiptPage> {
               ]),
               const SizedBox(height: 20),
               Row(children: [
-                const Text("Hairstyle:  "),
+                const Text("Hairstyle:  ",
+                    style: TextStyle(fontWeight: FontWeight.w600)),
                 Text((receiptInfo != null)
                     ? receiptInfo!['hairstyle']
                     : "xxxxxx xxxxxxxx xx")
               ]),
               const SizedBox(height: 10),
               Row(children: [
-                const Text("Price:         "),
+                const Text("Price:         ",
+                    style: TextStyle(fontWeight: FontWeight.w600)),
                 Text((receiptInfo != null) ? receiptInfo!['price'] : "\$xxxx")
               ]),
               const SizedBox(height: 10),
               Row(children: [
-                const Text("Date:         "),
+                const Text("Date:         ",
+                    style: TextStyle(fontWeight: FontWeight.w600)),
                 Text(widget.dateScheduled)
               ]),
               const SizedBox(height: 10),
               Row(children: [
-                const Text("Time:         "),
+                const Text("Time:         ",
+                    style: TextStyle(fontWeight: FontWeight.w600)),
                 Text((receiptInfo != null) ? receiptInfo!['time'] : "xx:xx xx")
               ]),
               const SizedBox(height: 10),
