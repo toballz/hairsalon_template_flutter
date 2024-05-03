@@ -6,6 +6,8 @@ import 'package:webclient/h.dart';
 
 //https://pub.dev/packages/calendar_date_picker2/example
 
+final today = DateUtils.dateOnly(DateTime.now());
+
 class CalendarPage extends StatefulWidget {
   const CalendarPage({super.key});
 
@@ -27,8 +29,8 @@ class CalendarPageState extends State<CalendarPage> {
   List<dynamic> overridedDates = [];
   //
   List<DateTime?> _rangeDatePickerValueWithDefaultValue = [
-    DateTime(2024, 5, 6),
-    DateTime(2024, 5, 6),
+    DateTime(today.year, today.month, today.day),
+    DateTime(today.year, today.month, today.day)
   ];
 //4
 
@@ -40,18 +42,21 @@ class CalendarPageState extends State<CalendarPage> {
     var overRideResponse =
         await Tools.httpPost({'v': '1', 'getOverrideDates': '2', 'va': "a"});
     var overRideJson = jsonDecode(overRideResponse.body);
-    setState(() {
-      sundayController.text = weeklyDatesJson['sunday'];
-      mondayController.text = weeklyDatesJson['monday'];
-      tuesdayController.text = weeklyDatesJson['tuesday'];
-      wednesdayController.text = weeklyDatesJson['wednesday'];
-      thursdayController.text = weeklyDatesJson['thursday'];
-      fridayController.text = weeklyDatesJson['friday'];
-      saturdayController.text = weeklyDatesJson['saturday'];
-      //
-      //
-      overridedDates = overRideJson as List<dynamic>;
-    });
+
+    if (mounted) {
+      setState(() {
+        sundayController.text = weeklyDatesJson['sunday'];
+        mondayController.text = weeklyDatesJson['monday'];
+        tuesdayController.text = weeklyDatesJson['tuesday'];
+        wednesdayController.text = weeklyDatesJson['wednesday'];
+        thursdayController.text = weeklyDatesJson['thursday'];
+        fridayController.text = weeklyDatesJson['friday'];
+        saturdayController.text = weeklyDatesJson['saturday'];
+        //
+        //
+        overridedDates = overRideJson as List<dynamic>;
+      });
+    }
   }
 
   @override
@@ -137,7 +142,8 @@ class CalendarPageState extends State<CalendarPage> {
       mainAxisSize: MainAxisSize.min,
       children: [
         const SizedBox(height: 10),
-        const Text('Weekly Schedules!'),
+        const Text('Weekly Schedules!',
+            style: TextStyle(fontSize: 34, fontWeight: FontWeight.w900)),
         const SizedBox(height: 10),
         const Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -147,9 +153,8 @@ class CalendarPageState extends State<CalendarPage> {
                 style: TextStyle(fontWeight: FontWeight.bold)),
             SizedBox(width: 60),
             Expanded(
-                child: Text("0900-0930, 1230, 1300-1330",
-                    textAlign: TextAlign.start,
-                    style: TextStyle(fontWeight: FontWeight.bold)))
+                child: Text("leave empty for unavailability!",
+                    textAlign: TextAlign.start))
           ],
         ),
 
@@ -199,14 +204,15 @@ class CalendarPageState extends State<CalendarPage> {
       mainAxisSize: MainAxisSize.min,
       children: [
         const SizedBox(height: 10),
-        const Text('Override A Specific Date?'),
+        const Text('Override A Specific Date?',
+            style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900)),
         CalendarDatePicker2(
           config: config,
           value: _rangeDatePickerValueWithDefaultValue,
           onValueChanged: (dates) =>
               setState(() => _rangeDatePickerValueWithDefaultValue = dates),
         ),
-        const Text('Enter override time(s), leave empty for the whole day'),
+        const Text('Enter override time(s), leave empty for unavailability!'),
         TextField(
             controller: overrideController,
             decoration: const InputDecoration(
@@ -229,11 +235,13 @@ class CalendarPageState extends State<CalendarPage> {
                   trailing: IconButton(
                     icon: const Icon(Icons.delete_outline),
                     onPressed: () {
-                      setState(() {
-                        overridedDates.removeWhere((map) =>
-                            map['date'] == overridedDates[index]['date']! &&
-                            map['time'] == overridedDates[index]['time']!);
-                      });
+                      if (mounted) {
+                        setState(() {
+                          overridedDates.removeWhere((map) =>
+                              map['date'] == overridedDates[index]['date']! &&
+                              map['time'] == overridedDates[index]['time']!);
+                        });
+                      }
                     },
                   ),
                   onTap: () {},
@@ -245,7 +253,7 @@ class CalendarPageState extends State<CalendarPage> {
             style: ElevatedButton.styleFrom(
                 minimumSize: const Size.fromHeight(40),
                 padding: const EdgeInsets.all(14)),
-            child: const Text("Save Override")),
+            child: const Text("Add Override")),
         const SizedBox(height: 25)
       ],
     );

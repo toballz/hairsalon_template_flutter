@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 /*
@@ -20,6 +21,14 @@ class Tools {
 
     return response;
   }
+
   //
+  static void scrollToBottom(ScrollController scl) {
+    scl.animateTo(
+      scl.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeOut,
+    );
+  }
   //
 }

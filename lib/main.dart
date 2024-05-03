@@ -34,37 +34,17 @@ class MyHomePage extends StatefulWidget {
 }
 
 class MyHomePageState extends State<MyHomePage> {
+  late ScrollController scrollContreoller1 = ScrollController();
   int _selectedIndex = 0;
 //
 //
+  @override
+  void initState() {
+    super.initState();
+  }
 
 //
 //
-  final List<Widget> _widgetOptions = <Widget>[
-    NestedScrollView(
-        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-          return <Widget>[
-            SliverAppBar(
-                expandedHeight: 250.0,
-                floating: false,
-                pinned: true,
-                stretch: true,
-                flexibleSpace: FlexibleSpaceBar(
-                    centerTitle: false,
-                    collapseMode: CollapseMode.parallax,
-                    title: Text("Welcome ${Site.domain}",
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                            color: Colors.white, fontSize: 16.0)),
-                    background: Image.network(
-                        "https://images.pexels.com/photos/1445327/pexels-photo-1445327.jpeg?auto=compress&cs=tinysrgb&w=600",
-                        fit: BoxFit.cover)))
-          ];
-        },
-        body: const IndexPage()),
-    const CalendarPage(),
-    const SettingsPage(),
-  ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -79,9 +59,33 @@ class MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
+      body: <Widget>[
+        NestedScrollView(
+            headerSliverBuilder:
+                (BuildContext context, bool innerBoxIsScrolled) {
+              return <Widget>[
+                SliverAppBar(
+                    automaticallyImplyLeading: false,
+                    expandedHeight: 250.0,
+                    floating: false,
+                    pinned: true,
+                    stretch: true,
+                    flexibleSpace: FlexibleSpaceBar(
+                        centerTitle: true,
+                        collapseMode: CollapseMode.parallax,
+                        title: Text("Welcome ${Site.domain}",
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                                color: Colors.white, fontSize: 16.0)),
+                        background: Image.network(
+                            "https://images.pexels.com/photos/1445327/pexels-photo-1445327.jpeg?auto=compress&cs=tinysrgb&w=600",
+                            fit: BoxFit.cover)))
+              ];
+            },
+            body: const IndexPage()),
+        const CalendarPage(),
+        const SettingsPage(),
+      ].elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(

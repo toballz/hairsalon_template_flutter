@@ -15,9 +15,7 @@ class IndexPage extends StatefulWidget {
 }
 
 class IndexPageState extends State<IndexPage> {
-  List<DateTime?> _multiDatePickerValueWithDefaultValue = [
-    DateTime(today.year, today.month, 1)
-  ];
+  List<DateTime?> _multiDatePickerValueWithDefaultValue = [];
 
   List<dynamic> items = [
     //{
@@ -35,22 +33,24 @@ class IndexPageState extends State<IndexPage> {
       'v': '1',
       'getDatesAppointmentsMoreThanDate': '2',
       'dateTo':
-          "${today.year}${today.month.toString().padLeft(2, '0')}${today.day.toString().padLeft(2, '0')}"
+          "${today.year.toString()}${today.month.toString().padLeft(2, '0')}${today.day.toString().padLeft(2, '0')}"
     }).then((value) {
-      setState(() {
-        List<dynamic> json = jsonDecode(value.body);
-        //print(json);
-        for (var value in json) {
-          _multiDatePickerValueWithDefaultValue.remove(DateTime(
-              int.parse(value['year']),
-              int.parse(value['month']),
-              int.parse(value['day'])));
-          _multiDatePickerValueWithDefaultValue.add(DateTime(
-              int.parse(value['year']),
-              int.parse(value['month']),
-              int.parse(value['day'])));
-        }
-      });
+      if (mounted) {
+        setState(() {
+          List<dynamic> json = jsonDecode(value.body);
+          //print(json);
+          for (var value in json) {
+            _multiDatePickerValueWithDefaultValue.remove(DateTime(
+                int.parse(value['year']),
+                int.parse(value['month']),
+                int.parse(value['day'])));
+            _multiDatePickerValueWithDefaultValue.add(DateTime(
+                int.parse(value['year']),
+                int.parse(value['month']),
+                int.parse(value['day'])));
+          }
+        });
+      }
     });
   }
 
@@ -69,9 +69,11 @@ class IndexPageState extends State<IndexPage> {
               var uni1 = dates;
               var uni2 = _multiDatePickerValueWithDefaultValue;
               if (uni1.length > uni2.length) {
-                setState(() {
-                  _multiDatePickerValueWithDefaultValue = uni2;
-                });
+                if (mounted) {
+                  setState(() {
+                    _multiDatePickerValueWithDefaultValue = uni2;
+                  });
+                }
               }
 
               List<DateTime?> uniDifference =
@@ -86,9 +88,11 @@ class IndexPageState extends State<IndexPage> {
                   'dateFrom':
                       "${uniDifference[0]!.year}${uniDifference[0]!.month.toString().padLeft(2, '0')}${uniDifference[0]!.day.toString().padLeft(2, '0')}"
                 }).then((value) {
-                  setState(() {
-                    items = jsonDecode(value.body);
-                  });
+                  if (mounted) {
+                    setState(() {
+                      items = jsonDecode(value.body);
+                    });
+                  }
                 });
               }
               //print(uniDifference);
@@ -101,13 +105,14 @@ class IndexPageState extends State<IndexPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: const Text("View Appointments"),
+          title: const Text("Upcoming Appointments"),
         ),
         body: Center(
             child: SingleChildScrollView(
-                physics: NeverScrollableScrollPhysics(),
+                physics: const NeverScrollableScrollPhysics(),
                 child: Container(
                   constraints: const BoxConstraints(maxWidth: 400),
                   child: Column(

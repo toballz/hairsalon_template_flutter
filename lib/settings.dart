@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:webclient/astect.dart';
 import 'package:webclient/h.dart';
 import 'package:webclient/profileedit.dart';
 
@@ -35,9 +35,11 @@ class SettingsPageState extends State<SettingsPage> {
                         trailing: Switch(
                             value: notifications,
                             onChanged: (value) {
-                              setState(() {
-                                notifications = !notifications;
-                              });
+                              if (mounted) {
+                                setState(() {
+                                  notifications = !notifications;
+                                });
+                              }
                             }),
                         onclick: () {
                           Navigator.push(
@@ -45,17 +47,7 @@ class SettingsPageState extends State<SettingsPage> {
                               MaterialPageRoute(
                                   builder: (context) =>
                                       const ProfileEditPage()));
-                        }),
-                    _CustomListTile(
-                        title: "Security Status",
-                        icon: CupertinoIcons.lock_shield,
-                        onclick: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const ProfileEditPage(),
-                              ));
-                        }),
+                        })
                   ],
                 ),
                 const Divider(),
@@ -65,16 +57,6 @@ class SettingsPageState extends State<SettingsPage> {
                     _CustomListTile(
                         title: "Profile",
                         icon: Icons.person_outline_rounded,
-                        onclick: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const ProfileEditPage(),
-                              ));
-                        }),
-                    _CustomListTile(
-                        title: "Messaging",
-                        icon: Icons.message_outlined,
                         onclick: () {
                           Navigator.push(
                               context,
@@ -94,7 +76,7 @@ class SettingsPageState extends State<SettingsPage> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const ProfileEditPage(),
+                                builder: (context) => const HelpPage(),
                               ));
                         }),
                     _CustomListTile(
@@ -104,7 +86,7 @@ class SettingsPageState extends State<SettingsPage> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const ProfileEditPage(),
+                                builder: (context) => const AboutPage(),
                               ));
                         }),
                     _CustomListTile(
