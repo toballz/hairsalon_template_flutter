@@ -3,6 +3,9 @@ import 'package:webclient/calendar.dart';
 import 'package:webclient/h.dart';
 import 'package:webclient/index.dart';
 import 'package:webclient/settings.dart';
+/*
+      flutter run -d chrome --web-browser-flag "--disable-web-security"
+*/
 
 void main() {
   runApp(const MyApp());
@@ -51,7 +54,8 @@ class MyHomePageState extends State<MyHomePage> {
                     collapseMode: CollapseMode.parallax,
                     title: Text("Welcome ${Site.domain}",
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.white, fontSize: 16.0)),
+                        style: const TextStyle(
+                            color: Colors.white, fontSize: 16.0)),
                     background: Image.network(
                         "https://images.pexels.com/photos/1445327/pexels-photo-1445327.jpeg?auto=compress&cs=tinysrgb&w=600",
                         fit: BoxFit.cover)))

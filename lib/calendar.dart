@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
+import 'package:webclient/h.dart';
 
 //https://pub.dev/packages/calendar_date_picker2/example
 
@@ -26,15 +29,35 @@ class CalendarPageState extends State<CalendarPage> {
     DateTime(2024, 5, 21),
   ];
 //
+  @override
+  void initState() {
+    super.initState();
+
+    Tools.httpPost({'v': '1', 'getweeklyStatic': '2', 'had': "a"})
+        .then((value) {
+      var ttt = jsonDecode(value.body);
+      setState(() {
+        sundayController.text = ttt['sunday'];
+        mondayController.text = ttt['monday'];
+        tuesdayController.text = ttt['tuesday'];
+        wednesdayController.text = ttt['wednesday'];
+        thursdayController.text = ttt['thursday'];
+        fridayController.text = ttt['friday'];
+        saturdayController.text = ttt['saturday'];
+      });
+    });
+  }
 //
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Set Availability"),
+          title: Text("Set Availability ${Site.domain}"),
         ),
         body: Center(
+            child: Container(
+          constraints: const BoxConstraints(maxWidth: 400),
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(12),
             child: Column(children: [
@@ -42,7 +65,7 @@ class CalendarPageState extends State<CalendarPage> {
               buildDefaultRangeDatePickerWithValue(),
             ]),
           ),
-        ));
+        )));
   }
 
   String _getValueText(
@@ -112,7 +135,7 @@ class CalendarPageState extends State<CalendarPage> {
                 style: TextStyle(fontWeight: FontWeight.bold)),
             SizedBox(width: 60),
             Expanded(
-                child: Text("0900-0930, 1130-1230, 1300-1330",
+                child: Text("0900-0930, 1230, 1300-1330",
                     textAlign: TextAlign.start,
                     style: TextStyle(fontWeight: FontWeight.bold)))
           ],
