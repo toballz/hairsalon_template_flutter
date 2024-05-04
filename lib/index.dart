@@ -25,6 +25,19 @@ class IndexPageState extends State<IndexPage> {
     //}
   ];
 
+  Color? bgColor = Tools.themeDark
+      ? Tools.colorShuttle['bgcolorDark']
+      : Tools.colorShuttle['bgcolorLight'];
+  Color? tabColor = Tools.themeDark
+      ? Tools.colorShuttle['tabcolorDark']
+      : Tools.colorShuttle['tabcolorLight'];
+  Color? textColor = Tools.themeDark
+      ? Tools.colorShuttle['textcolorDark']
+      : Tools.colorShuttle['textcolorLight'];
+  //
+  //
+  //
+  //
   @override
   void initState() {
     super.initState();
@@ -56,9 +69,13 @@ class IndexPageState extends State<IndexPage> {
 
   Widget _buildDefaultMultiDatePickerWithValue() {
     final config = CalendarDatePicker2Config(
-      calendarType: CalendarDatePicker2Type.multi,
-      selectedDayHighlightColor: Colors.indigo,
-    );
+        calendarType: CalendarDatePicker2Type.multi,
+        selectedDayHighlightColor: Colors.indigo,
+        dayTextStyle: TextStyle(color: textColor),
+        controlsTextStyle: TextStyle(
+            color: textColor, fontSize: 15, fontWeight: FontWeight.bold),
+        weekdayLabelTextStyle: TextStyle(color: textColor),
+        yearTextStyle: TextStyle(color: textColor));
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -107,9 +124,7 @@ class IndexPageState extends State<IndexPage> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text("Upcoming Appointments"),
-        ),
+        backgroundColor: bgColor,
         body: Center(
             child: SingleChildScrollView(
                 physics: const NeverScrollableScrollPhysics(),
@@ -117,6 +132,11 @@ class IndexPageState extends State<IndexPage> {
                   constraints: const BoxConstraints(maxWidth: 400),
                   child: Column(
                     children: [
+                      Text("Upcoming Appointments",
+                          style: TextStyle(
+                              color: textColor,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 22)),
                       _buildDefaultMultiDatePickerWithValue(),
                       SizedBox(
                           height: (items.length *
@@ -131,10 +151,12 @@ class IndexPageState extends State<IndexPage> {
                                             items[index]['imageUrl']!),
                                         width: 56,
                                         height: 650),
-                                    title: Text(items[index]['hairname']!),
-                                    subtitle: Text(items[index]['datetime']!),
-                                    trailing: const Icon(
-                                        Icons.access_alarms_outlined),
+                                    title: Text(items[index]['hairname']!,
+                                        style: TextStyle(color: textColor)),
+                                    subtitle: Text(items[index]['datetime']!,
+                                        style: TextStyle(color: textColor)),
+                                    trailing: Icon(Icons.access_alarms_outlined,
+                                        color: textColor),
                                     onTap: () {
                                       Navigator.push(
                                         context,

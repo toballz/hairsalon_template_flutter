@@ -227,7 +227,8 @@ class CalendarPageState extends State<CalendarPage> {
             TextStyle(color: textColor, fontWeight: FontWeight.bold),
         controlsTextStyle: TextStyle(
             color: textColor, fontSize: 15, fontWeight: FontWeight.bold),
-        dayTextStyle: TextStyle(color: textColor));
+        dayTextStyle: TextStyle(color: textColor),
+        yearTextStyle: TextStyle(color: textColor));
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
