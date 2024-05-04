@@ -1,7 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:webclient/astect.dart';
 import 'package:webclient/h.dart';
 import 'package:webclient/profileedit.dart';
+
+//https://www.fluttertemplates.dev/widgets/must_haves/settings_page#settings_page_2
 
 class SettingsPage extends StatefulWidget {
   const SettingsPage({Key? key}) : super(key: key);
@@ -19,7 +22,12 @@ class SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    Color? bgColor = Tools.themeDark
+        ? Tools.colorShuttle['bgcolorDark']
+        : Tools.colorShuttle['bgcolorLight'];
+
     return Scaffold(
+        backgroundColor: bgColor,
         appBar: AppBar(title: Text(Site.domain)),
         body: Center(
           child: Container(
@@ -41,13 +49,20 @@ class SettingsPageState extends State<SettingsPage> {
                                 });
                               }
                             }),
-                        onclick: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      const ProfileEditPage()));
-                        })
+                        onclick: () {}),
+                    _CustomListTile(
+                        title: "Light/Dark Mode",
+                        icon: CupertinoIcons.moon,
+                        trailing: Switch(
+                            value: Tools.themeDark,
+                            onChanged: (value) {
+                              if (mounted) {
+                                setState(() {
+                                  Tools.themeDark = !Tools.themeDark;
+                                });
+                              }
+                            }),
+                        onclick: () {})
                   ],
                 ),
                 const Divider(),
@@ -123,9 +138,12 @@ class _CustomListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color? textColor = Tools.themeDark
+        ? Tools.colorShuttle['textcolorDark']
+        : Tools.colorShuttle['textcolorLight'];
     return ListTile(
-      title: Text(title),
-      leading: Icon(icon),
+      title: Text(title, style: TextStyle(color: textColor)),
+      leading: Icon(icon, color: textColor),
       trailing: trailing,
       onTap: onclick,
     );
@@ -143,21 +161,24 @@ class _SingleSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Color? textColor = Tools.themeDark
+        ? Tools.colorShuttle['textcolorDark']
+        : Tools.colorShuttle['textcolorLight'];
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (title != null)
           Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              title!,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-          ),
-        Column(
-          children: children,
-        ),
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                title!,
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: textColor),
+              )),
+        Column(children: children),
       ],
     );
   }

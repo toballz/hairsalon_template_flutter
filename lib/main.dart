@@ -19,9 +19,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Navigation Bar',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData(),
       home: const MyHomePage(),
     );
   }
@@ -59,13 +57,20 @@ class MyHomePageState extends State<MyHomePage> {
 //
   @override
   Widget build(BuildContext context) {
+    Color? bgColor = Tools.themeDark
+        ? Tools.colorShuttle['bgcolorDark']
+        : Tools.colorShuttle['bgcolorLight'];
+
     return Scaffold(
+      backgroundColor: bgColor,
       body: <Widget>[
         NestedScrollView(
             headerSliverBuilder:
                 (BuildContext context, bool innerBoxIsScrolled) {
               return <Widget>[
                 SliverAppBar(
+                    foregroundColor: bgColor,
+                    backgroundColor: bgColor,
                     automaticallyImplyLeading: false,
                     expandedHeight: 250.0,
                     floating: false,
@@ -89,24 +94,15 @@ class MyHomePageState extends State<MyHomePage> {
         const SettingsPage(),
       ].elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
-  type: BottomNavigationBarType.fixed,
+        type: BottomNavigationBarType.fixed,
         items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home'
-          ),
+              icon: Icon(Icons.calendar_month_outlined), label: 'Availability'),
           BottomNavigationBarItem(
-            icon: Icon(Icons.calendar_month_outlined),
-            label: 'Availability'
-          ),
+              icon: Icon(Icons.query_stats_sharp), label: 'Statistics'),
           BottomNavigationBarItem(
-            icon: Icon(Icons.query_stats_sharp),
-            label: 'Statistics'
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings'
-          ),
+              icon: Icon(Icons.settings), label: 'Settings'),
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,

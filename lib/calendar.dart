@@ -33,6 +33,16 @@ class CalendarPageState extends State<CalendarPage> {
     DateTime(today.year, today.month, today.day)
   ];
 //4
+  Color? bgColor = Tools.themeDark
+      ? Tools.colorShuttle['bgcolorDark']
+      : Tools.colorShuttle['bgcolorLight'];
+  Color? tabColor = Tools.themeDark
+      ? Tools.colorShuttle['tabcolorDark']
+      : Tools.colorShuttle['tabcolorLight'];
+  Color? textColor = Tools.themeDark
+      ? Tools.colorShuttle['textcolorDark']
+      : Tools.colorShuttle['textcolorDark Light'];
+//
 
   void getWeeklyANDOverrideDates() async {
     var weeklyDatesResponse =
@@ -69,6 +79,7 @@ class CalendarPageState extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: bgColor,
         appBar: AppBar(title: Text(Site.domain)),
         body: Center(
             child: Container(
@@ -122,7 +133,8 @@ class CalendarPageState extends State<CalendarPage> {
   Widget buildDayRow(
       String day, TextEditingController textcontrolller, double xx) {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-      Text(day, style: const TextStyle(fontWeight: FontWeight.bold)),
+      Text(day,
+          style: TextStyle(fontWeight: FontWeight.bold, color: textColor)),
       SizedBox(width: xx),
       Expanded(
           child: TextField(
@@ -142,19 +154,22 @@ class CalendarPageState extends State<CalendarPage> {
       mainAxisSize: MainAxisSize.min,
       children: [
         const SizedBox(height: 10),
-        const Text('Weekly Schedules!',
-            style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900)),
+        Text('Weekly Schedules!',
+            style: TextStyle(
+                fontSize: 30, fontWeight: FontWeight.w900, color: textColor)),
         const SizedBox(height: 10),
-        const Row(
+        Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text("Days",
                 textAlign: TextAlign.start,
-                style: TextStyle(fontWeight: FontWeight.bold)),
-            SizedBox(width: 60),
+                style:
+                    TextStyle(fontWeight: FontWeight.bold, color: textColor)),
+            const SizedBox(width: 60),
             Expanded(
                 child: Text("leave empty for unavailability!",
-                    textAlign: TextAlign.start))
+                    textAlign: TextAlign.start,
+                    style: TextStyle(color: textColor)))
           ],
         ),
 
@@ -206,31 +221,27 @@ class CalendarPageState extends State<CalendarPage> {
 //specific
   Widget buildDefaultRangeDatePickerWithValue() {
     final config = CalendarDatePicker2Config(
-      calendarType: CalendarDatePicker2Type.range,
-      selectedDayHighlightColor: Colors.teal[800],
-      weekdayLabelTextStyle: const TextStyle(
-        color: Colors.black87,
-        fontWeight: FontWeight.bold,
-      ),
-      controlsTextStyle: const TextStyle(
-        color: Colors.black,
-        fontSize: 15,
-        fontWeight: FontWeight.bold,
-      ),
-    );
+        calendarType: CalendarDatePicker2Type.range,
+        selectedDayHighlightColor: Colors.teal[800],
+        weekdayLabelTextStyle:
+            TextStyle(color: textColor, fontWeight: FontWeight.bold),
+        controlsTextStyle: TextStyle(
+            color: textColor, fontSize: 15, fontWeight: FontWeight.bold),
+        dayTextStyle: TextStyle(color: textColor));
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         const SizedBox(height: 10),
-        const Text('Override A Specific Date?',
-            style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900)),
+        Text('Override A Specific Date?',
+            style: TextStyle(
+                fontSize: 25, fontWeight: FontWeight.w900, color: textColor)),
         CalendarDatePicker2(
-          config: config,
-          value: _rangeDatePickerValueWithDefaultValue,
-          onValueChanged: (dates) =>
-              setState(() => _rangeDatePickerValueWithDefaultValue = dates),
-        ),
-        const Text('Enter override time(s), leave empty for unavailability!'),
+            config: config,
+            value: _rangeDatePickerValueWithDefaultValue,
+            onValueChanged: (dates) =>
+                setState(() => _rangeDatePickerValueWithDefaultValue = dates)),
+        Text('Enter override time(s), leave empty for unavailability!',
+            style: TextStyle(color: textColor)),
         TextField(
             controller: overrideController,
             decoration: const InputDecoration(
@@ -248,10 +259,12 @@ class CalendarPageState extends State<CalendarPage> {
                 return ListTile(
                   leading:
                       const Icon(Icons.lock_clock_outlined), // Icon on the left
-                  title: Text("Date: ${overridedDates[index]['date']!}"),
-                  subtitle: Text("Time: ${overridedDates[index]['time']!}"),
+                  title: Text("Date: ${overridedDates[index]['date']!}",
+                      style: TextStyle(color: textColor)),
+                  subtitle: Text("Time: ${overridedDates[index]['time']!}",
+                      style: TextStyle(color: textColor)),
                   trailing: IconButton(
-                    icon: const Icon(Icons.delete_outline),
+                    icon: Icon(Icons.delete_outline, color: textColor),
                     onPressed: () {
                       if (mounted) {
                         setState(() {

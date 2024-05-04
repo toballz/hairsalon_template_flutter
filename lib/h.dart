@@ -11,6 +11,18 @@ class Site {
 }
 
 class Tools {
+  static bool themeDark = false;
+
+  ///bgcolorDark,  tabcolorDark,  textcolorDark
+  static Map<String, Color> colorShuttle = {
+    "bgcolorDark": const Color.fromARGB(255, 21, 32, 54),
+    "bgcolorLight": const Color.fromARGB(255, 255, 255, 255),
+    "tabcolorDark": const Color.fromARGB(255, 35, 55, 95),
+    "tabcolorLight": const Color.fromARGB(255, 35, 55, 95),
+    "textcolorDark": const Color.fromARGB(255, 255, 255, 255),
+    "textcolorLight": const Color.fromARGB(255, 4, 0, 0),
+  };
+
   static Future<http.Response> httpPost(Map<String, String> dataPost) async {
     var response = await http.post(
         Uri.parse('https://f84c-172-59-112-200.ngrok-free.app/_null.php'),
