@@ -6,8 +6,6 @@ import 'package:webclient/h.dart';
 
 //https://pub.dev/packages/calendar_date_picker2/example
 
-final today = DateUtils.dateOnly(DateTime.now());
-
 class CalendarPage extends StatefulWidget {
   const CalendarPage({super.key});
 
@@ -29,8 +27,8 @@ class CalendarPageState extends State<CalendarPage> {
   List<dynamic> overridedDates = [];
   //
   List<DateTime?> _rangeDatePickerValueWithDefaultValue = [
-    DateTime(today.year, today.month, today.day),
-    DateTime(today.year, today.month, today.day)
+    DateTime(Tools.todayDate.year, Tools.todayDate.month, Tools.todayDate.day),
+    DateTime(Tools.todayDate.year, Tools.todayDate.month, Tools.todayDate.day)
   ];
 //4
   Color? bgColor = Tools.themeDark

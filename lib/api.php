@@ -51,8 +51,7 @@ if(isset($_POST['v']) && $_POST['v']=="1"){
         }
     }
     if(isset($_POST['getDatesAppointmentsMoreThanDate']) && isset($_POST['dateTo'])){
-        $tg=db::stmt("SELECT `date` FROM schedulee WHERE date >= '".$_POST['dateTo']."' LIMIT 13;");
- 
+        $tg=db::stmt("SELECT `date` FROM schedulee WHERE `date` >= '".trim($_POST['dateTo'])."' LIMIT 13;");
         $i=0;
         while($rr=mysqli_fetch_assoc($tg)){
             $rd=DateTime::createFromFormat('Ymd', $rr['date']);
@@ -71,6 +70,12 @@ if(isset($_POST['v']) && $_POST['v']=="1"){
                
         }
     }
+    if(isset($_POST['updatesWeekly']) && isset($_POST['ajr'])){
+        $yfs="UPDATE `availability` SET `description`='".mysqli_real_escape_string(db::conn(),$_POST['updatesWeekly'])."' WHERE `namer`='weekly';";
+        $tg=db::stmt($yfs);
+        //echo $yfs;
+        $u=array('a'=>true);
+    }
     
     if(isset($_POST['receiptIIinfo']) && isset($_POST['j'])){
         $tg=db::stmt("SELECT `price`,`time`,`hairstyle`,`email`,`phonne`,`customername`,`image`  FROM `schedulee` WHERE `rida`='".$_POST['receiptIIinfo']."' ;");
@@ -82,8 +87,32 @@ if(isset($_POST['v']) && $_POST['v']=="1"){
     }
 
 
+//
+//
+    if(isset($_POST['stats']) && isset($_POST['sg']) && isset($_POST['beginingOfThisMonth']) && isset($_POST['beginingOfLastMonth'])){
+        $botm=trim($_POST['beginingOfThisMonth']);$botmbs=$botm+30;
+        $bolm=trim($_POST['beginingOfLastMonth']); 
+        $tg=db::stmt("SELECT 
+        (SELECT COUNT(*) FROM `schedulee` WHERE `date` >= '$botm' AND `date` < '$botmbs') AS beginingOfThisMonth,
+        (SELECT COUNT(*) FROM schedulee WHERE `date` >= '$bolm' AND `date` < '$botm') AS lastMonth,
+        (SELECT COUNT(*) FROM schedulee) AS allToDate
+            FROM schedulee; ");
+
+            //
+        $tg2=db::stmt("SELECT `hairstyle`,`image`, COUNT(*) AS appearance_count FROM schedulee GROUP BY `hairstyle` ORDER BY appearance_count DESC LIMIT 5");
+            // 
+        while($yts=mysqli_fetch_assoc($tg2)){
+            $u['popularHairstyleBooked'][]=$yts; 
+        }
+        while($ys=mysqli_fetch_assoc($tg)){
+            $u['beginingOfThisMonth']=$ys['beginingOfThisMonth'];
+            $u['lastMonth']=$ys['lastMonth'];
+            $u['allToDate']=$ys['allToDate'];
+        }
 
 
+        
+    }
 
 
     

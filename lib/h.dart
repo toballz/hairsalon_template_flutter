@@ -13,6 +13,9 @@ class Site {
 class Tools {
   static bool themeDark = false;
 
+  ///yyyymmdd
+  static final todayDate = DateUtils.dateOnly(DateTime.now());
+
   ///bgcolorDark,  tabcolorDark,  textcolorDark
   static Map<String, Color> colorShuttle = {
     "bgcolorDark": const Color.fromARGB(255, 21, 32, 54),

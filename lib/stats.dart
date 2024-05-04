@@ -18,6 +18,8 @@ class StatisticsPageState extends State<StatisticsPage> {
     "lastMonth": 0,
     "allToDate": 0
   };
+  List<dynamic>? popularHairstyleBooked = [];
+
   int thisMonthGross = 0;
   double thisMonthEstimatedTax = 0;
   double thisMonthNet = 0;
@@ -31,9 +33,30 @@ class StatisticsPageState extends State<StatisticsPage> {
   double allMonthNet = 0;
 
   void getHttpPosters() async {
-    var d = await Tools.httpPost({'v': '1', 'stats': "", 'sg': "0"});
+    String beginingOfMonth =
+        "${Tools.todayDate.year}${Tools.todayDate.month.toString().padLeft(2, '0')}${Tools.todayDate.day.toString().padLeft(2, '0')}";
+
+    DateTime bolms = DateTime(
+        (Tools.todayDate.month == 1
+            ? Tools.todayDate.year - 1
+            : Tools.todayDate.year),
+        (Tools.todayDate.month - 1 == 0 ? 12 : Tools.todayDate.month - 1),
+        01);
+    String beginingOfLastMonth =
+        "${bolms.year}${bolms.month.toString().padLeft(2, '0')}${bolms.day.toString().padLeft(2, '0')}";
+    //print(beginingOfLastMonth);
+
+    var d = await Tools.httpPost({
+      'v': '1',
+      'stats': "",
+      'beginingOfThisMonth': beginingOfMonth,
+      'beginingOfLastMonth': beginingOfLastMonth,
+      'sg': "0"
+    });
+
     setState(() {
       countStaeeiwts = jsonDecode(d.body);
+      popularHairstyleBooked = countStaeeiwts!['popularHairstyleBooked'];
       print(countStaeeiwts);
 
       thisMonthGross = int.parse(countStaeeiwts!['beginingOfThisMonth']) * 50;
@@ -115,12 +138,25 @@ class StatisticsPageState extends State<StatisticsPage> {
                       color: textColor)),
               const SizedBox(height: 12),
               Column(children: [
-                Container(
-                    padding: const EdgeInsets.all(12),
-                    margin: const EdgeInsets.only(bottom: 21),
-                    color: tabColor,
-                    child: const Row(
-                        children: [Text("Net"), Spacer(), Text("\$11322.23")]))
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: popularHairstyleBooked!.length,
+                  itemBuilder: (BuildContext context, int o) {
+                    return ListTile(
+                      leading: Image(
+                          width: 45,
+                          image: NetworkImage(
+                              "https://cocohairsignature.com/img/${popularHairstyleBooked![o]['image']}.jpg?93jv")), // Icon on the left
+                      title: Text(popularHairstyleBooked![o]['hairstyle'],
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(color: textColor)),
+                      subtitle: Text(
+                          "${popularHairstyleBooked![o]['appearance_count']}: people",
+                          style: TextStyle(color: textColor)),
+                      onTap: () {},
+                    );
+                  },
+                ),
               ])
             ]),
           ),

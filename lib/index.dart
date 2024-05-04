@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:webclient/h.dart';
 import 'package:webclient/receipt.dart';
 
-final today = DateUtils.dateOnly(DateTime.now());
-
 class IndexPage extends StatefulWidget {
   const IndexPage({super.key});
 
@@ -21,7 +19,7 @@ class IndexPageState extends State<IndexPage> {
     //{
     //'hairname': 'Item 2','orderId':'12',
     //'datetime': 'Subtitle for Item 2',
-    //'imageUrl': 'https://imgs.search.brave.com/IRG7NtIebt6J0rglmrlogeonGsjv7twjhznwx3vpUT0/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9wbHVz/LnVuc3BsYXNoLmNv/bS9wcmVtaXVtX3Bo/b3RvLTE2OTA4MjAz/MTc1ODYtZDkwNjRi/NjI0YmUwP3E9ODAm/dz0xMDAwJmF1dG89/Zm9ybWF0JmZpdD1j/cm9wJml4bGliPXJi/LTQuMC4zJml4aWQ9/TTN3eE1qQTNmREI4/TUh4elpXRnlZMmg4/TVRkOGZIUmhhMlVs/TWpCaEpUSXdjR2xq/ZEhWeVpYeGxibnd3/Zkh3d2ZIeDhNQT09', // Placeholder image URL
+    //'imageUrl': 'https://cocohairsignature.com/img/29.jpg?93jv', // Placeholder image URL
     //}
   ];
 
@@ -46,7 +44,7 @@ class IndexPageState extends State<IndexPage> {
       'v': '1',
       'getDatesAppointmentsMoreThanDate': '2',
       'dateTo':
-          "${today.year.toString()}${today.month.toString().padLeft(2, '0')}${today.day.toString().padLeft(2, '0')}"
+          "${Tools.todayDate.year.toString()}${Tools.todayDate.month.toString().padLeft(2, '0')}${Tools.todayDate.day.toString().padLeft(2, '0')}"
     }).then((value) {
       if (mounted) {
         setState(() {
