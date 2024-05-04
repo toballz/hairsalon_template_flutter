@@ -143,7 +143,7 @@ class CalendarPageState extends State<CalendarPage> {
       children: [
         const SizedBox(height: 10),
         const Text('Weekly Schedules!',
-            style: TextStyle(fontSize: 34, fontWeight: FontWeight.w900)),
+            style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900)),
         const SizedBox(height: 10),
         const Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -223,7 +223,7 @@ class CalendarPageState extends State<CalendarPage> {
       children: [
         const SizedBox(height: 10),
         const Text('Override A Specific Date?',
-            style: TextStyle(fontSize: 28, fontWeight: FontWeight.w900)),
+            style: TextStyle(fontSize: 25, fontWeight: FontWeight.w900)),
         CalendarDatePicker2(
           config: config,
           value: _rangeDatePickerValueWithDefaultValue,

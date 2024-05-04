@@ -45,7 +45,7 @@ class ReceiptPageState extends State<ReceiptPage> {
               icon: const Icon(Icons.arrow_back_ios_new_outlined)),
         ),
         body: Center(
-            child: Container(
+            child: Container(padding: const EdgeInsets.all(12),
           constraints: const BoxConstraints(maxWidth: 400),
           child: SingleChildScrollView(
               child: Column(

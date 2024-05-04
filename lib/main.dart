@@ -3,6 +3,7 @@ import 'package:webclient/calendar.dart';
 import 'package:webclient/h.dart';
 import 'package:webclient/index.dart';
 import 'package:webclient/settings.dart';
+import 'package:webclient/stats.dart';
 /*
       flutter run -d chrome --web-browser-flag "--disable-web-security"
 */
@@ -84,21 +85,27 @@ class MyHomePageState extends State<MyHomePage> {
             },
             body: const IndexPage()),
         const CalendarPage(),
+        const StatisticsPage(),
         const SettingsPage(),
       ].elementAt(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
+  type: BottomNavigationBarType.fixed,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
-            label: 'Home',
+            label: 'Home'
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.calendar_month_outlined),
-            label: 'Availability',
+            label: 'Availability'
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.query_stats_sharp),
+            label: 'Statistics'
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
-            label: 'Settings',
+            label: 'Settings'
           ),
         ],
         currentIndex: _selectedIndex,
