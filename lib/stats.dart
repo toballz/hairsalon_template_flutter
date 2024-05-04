@@ -57,7 +57,7 @@ class StatisticsPageState extends State<StatisticsPage> {
     setState(() {
       countStaeeiwts = jsonDecode(d.body);
       popularHairstyleBooked = countStaeeiwts!['popularHairstyleBooked'];
-      print(countStaeeiwts);
+      //print(countStaeeiwts);
 
       thisMonthGross = int.parse(countStaeeiwts!['beginingOfThisMonth']) * 50;
       thisMonthEstimatedTax = thisMonthGross - (thisMonthGross * 0.7);
@@ -95,7 +95,8 @@ class StatisticsPageState extends State<StatisticsPage> {
     return Scaffold(
         backgroundColor: bgColor,
         appBar: AppBar(title: Text(Site.domain)),
-        body: Container(
+        body: Center(
+            child: Container(
           constraints: const BoxConstraints(maxWidth: 400),
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(12),
@@ -146,7 +147,7 @@ class StatisticsPageState extends State<StatisticsPage> {
                       leading: Image(
                           width: 45,
                           image: NetworkImage(
-                              "https://cocohairsignature.com/img/${popularHairstyleBooked![o]['image']}.jpg?93jv")), // Icon on the left
+                              "https://${Site.imgDomain}/img/${popularHairstyleBooked![o]['image']}.jpg?93jv")), // Icon on the left
                       title: Text(popularHairstyleBooked![o]['hairstyle'],
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(color: textColor)),
@@ -160,7 +161,7 @@ class StatisticsPageState extends State<StatisticsPage> {
               ])
             ]),
           ),
-        ));
+        )));
   }
 }
 

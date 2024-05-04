@@ -137,8 +137,7 @@ class IndexPageState extends State<IndexPage> {
                               fontSize: 22)),
                       _buildDefaultMultiDatePickerWithValue(),
                       SizedBox(
-                          height: (items.length *
-                              (MediaQuery.of(context).size.height * 0.1)),
+                          height: null,
                           child: ListView.builder(
                               shrinkWrap: true,
                               itemCount: items.length,
@@ -150,6 +149,7 @@ class IndexPageState extends State<IndexPage> {
                                         width: 56,
                                         height: 650),
                                     title: Text(items[index]['hairname']!,
+                                        overflow: TextOverflow.ellipsis,
                                         style: TextStyle(color: textColor)),
                                     subtitle: Text(items[index]['datetime']!,
                                         style: TextStyle(color: textColor)),

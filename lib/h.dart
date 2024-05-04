@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 */
 
 class Site {
-  static String domain = "cocohaursignature.com";
+  static String domain = "cocohairsignature.com";
   static String imgDomain = "cocohairsignature.com";
 }
 
@@ -27,12 +27,12 @@ class Tools {
   };
 
   static Future<http.Response> httpPost(Map<String, String> dataPost) async {
-    var response = await http.post(
-        Uri.parse('https://f84c-172-59-112-200.ngrok-free.app/_null.php'),
-        headers: {
-          //'Content-Type': 'application/json',
-        },
-        body: dataPost);
+    var response =
+        await http.post(Uri.parse('https://${Site.domain}/i/api.php'),
+            headers: {
+              //'Content-Type': 'application/json',
+            },
+            body: dataPost);
 
     return response;
   }
