@@ -53,24 +53,25 @@ class StatisticsPageState extends State<StatisticsPage> {
       'beginingOfLastMonth': beginingOfLastMonth,
       'sg': "0"
     });
+    if (mounted) {
+      setState(() {
+        countStaeeiwts = jsonDecode(d.body);
+        popularHairstyleBooked = countStaeeiwts!['popularHairstyleBooked'];
+        //print(countStaeeiwts);
 
-    setState(() {
-      countStaeeiwts = jsonDecode(d.body);
-      popularHairstyleBooked = countStaeeiwts!['popularHairstyleBooked'];
-      //print(countStaeeiwts);
-
-      thisMonthGross = int.parse(countStaeeiwts!['beginingOfThisMonth']) * 50;
-      thisMonthEstimatedTax = thisMonthGross - (thisMonthGross * 0.7);
-      thisMonthNet = thisMonthGross - thisMonthEstimatedTax;
-      //
-      lastMonthGross = int.parse(countStaeeiwts!['lastMonth']) * 50;
-      lastMonthEstimatedTax = lastMonthGross - (lastMonthGross * 0.7);
-      lastMonthNet = lastMonthGross - lastMonthEstimatedTax;
-      //
-      allMonthGross = int.parse(countStaeeiwts!['allToDate']) * 50;
-      allMonthEstimatedTax = allMonthGross - (allMonthGross * 0.7);
-      allMonthNet = allMonthGross - allMonthEstimatedTax;
-    });
+        thisMonthGross = int.parse(countStaeeiwts!['beginingOfThisMonth']) * 50;
+        thisMonthEstimatedTax = thisMonthGross - (thisMonthGross * 0.7);
+        thisMonthNet = thisMonthGross - thisMonthEstimatedTax;
+        //
+        lastMonthGross = int.parse(countStaeeiwts!['lastMonth']) * 50;
+        lastMonthEstimatedTax = lastMonthGross - (lastMonthGross * 0.7);
+        lastMonthNet = lastMonthGross - lastMonthEstimatedTax;
+        //
+        allMonthGross = int.parse(countStaeeiwts!['allToDate']) * 50;
+        allMonthEstimatedTax = allMonthGross - (allMonthGross * 0.7);
+        allMonthNet = allMonthGross - allMonthEstimatedTax;
+      });
+    }
   }
 
   @override
@@ -94,74 +95,92 @@ class StatisticsPageState extends State<StatisticsPage> {
 
     return Scaffold(
         backgroundColor: bgColor,
-        appBar: AppBar(title: Text(Site.domain)),
-        body: Center(
-            child: Container(
-          constraints: const BoxConstraints(maxWidth: 400),
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(12),
-            child: Column(children: [
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: <Widget>[
-                    TabletAiiStats(
-                        titleo: "This Month",
-                        tabcoloro: tabColor!,
-                        grosso: thisMonthGross,
-                        etaxo: thisMonthEstimatedTax,
-                        neto: thisMonthNet),
-
-                    TabletAiiStats(
-                      titleo: "Last Month",
-                      tabcoloro: tabColor,
-                      grosso: lastMonthGross,
-                      etaxo: lastMonthEstimatedTax,
-                      neto: lastMonthNet,
-                    ),
-                    TabletAiiStats(
-                      titleo: "All till date",
-                      tabcoloro: tabColor,
-                      grosso: allMonthGross,
-                      etaxo: allMonthEstimatedTax,
-                      neto: allMonthNet,
-                    )
-                    // Add more containers as needed
-                  ],
-                ),
-              ),
-              const Divider(),
-              const SizedBox(height: 12),
-              Text("Top 5 hairstyle Booked",
-                  style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 17,
-                      color: textColor)),
-              const SizedBox(height: 12),
-              Column(children: [
-                ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: popularHairstyleBooked!.length,
-                  itemBuilder: (BuildContext context, int o) {
-                    return ListTile(
-                      leading: Image(
-                          width: 45,
-                          image: NetworkImage(
-                              "https://${Site.imgDomain}/img/${popularHairstyleBooked![o]['image']}.jpg?93jv")), // Icon on the left
-                      title: Text(popularHairstyleBooked![o]['hairstyle'],
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(color: textColor)),
-                      subtitle: Text(
-                          "${popularHairstyleBooked![o]['appearance_count']}: people",
-                          style: TextStyle(color: textColor)),
-                      onTap: () {},
-                    );
-                  },
-                ),
+        appBar: AppBar(
+            title: Text(Site.domain, style: const TextStyle(fontSize: 17)),
+            actions: [
+              Stack(children: [
+                Icon(Icons.message_outlined,
+                    size: 32, color: textColor), // Your icon
+                Positioned(
+                    right: 0,
+                    top: 0,
+                    child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: const BoxDecoration(
+                            color: Colors.red, shape: BoxShape.circle),
+                        child: const Text('5', // Your number
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 12))))
               ])
             ]),
-          ),
-        )));
+        body: Align(
+            alignment: Alignment.topCenter,
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 400),
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(12),
+                child: Column(children: [
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: <Widget>[
+                        TabletAiiStats(
+                            titleo: "This Month",
+                            tabcoloro: tabColor!,
+                            grosso: thisMonthGross,
+                            etaxo: thisMonthEstimatedTax,
+                            neto: thisMonthNet),
+
+                        TabletAiiStats(
+                          titleo: "Last Month",
+                          tabcoloro: tabColor,
+                          grosso: lastMonthGross,
+                          etaxo: lastMonthEstimatedTax,
+                          neto: lastMonthNet,
+                        ),
+                        TabletAiiStats(
+                          titleo: "All till date",
+                          tabcoloro: tabColor,
+                          grosso: allMonthGross,
+                          etaxo: allMonthEstimatedTax,
+                          neto: allMonthNet,
+                        )
+                        // Add more containers as needed
+                      ],
+                    ),
+                  ),
+                  const Divider(),
+                  const SizedBox(height: 12),
+                  Text("Top 5 hairstyle Booked",
+                      style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 17,
+                          color: textColor)),
+                  const SizedBox(height: 12),
+                  Column(children: [
+                    ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: popularHairstyleBooked!.length,
+                      itemBuilder: (BuildContext context, int o) {
+                        return ListTile(
+                          leading: Image(
+                              width: 45,
+                              image: NetworkImage(
+                                  "https://${Site.imgDomain}/img/${popularHairstyleBooked![o]['image']}.jpg?93jv")), // Icon on the left
+                          title: Text(popularHairstyleBooked![o]['hairstyle'],
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(color: textColor)),
+                          subtitle: Text(
+                              "${popularHairstyleBooked![o]['appearance_count']}: people booked this",
+                              style: TextStyle(color: textColor)),
+                          onTap: () {},
+                        );
+                      },
+                    ),
+                  ])
+                ]),
+              ),
+            )));
   }
 }
 

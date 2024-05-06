@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:webclient/h.dart';
 
 //https://pub.dev/packages/calendar_date_picker2/example
@@ -26,10 +27,7 @@ class CalendarPageState extends State<CalendarPage> {
   //
   List<dynamic> overridedDates = [];
   //
-  List<DateTime?> _rangeDatePickerValueWithDefaultValue = [
-    DateTime(Tools.todayDate.year, Tools.todayDate.month, Tools.todayDate.day),
-    DateTime(Tools.todayDate.year, Tools.todayDate.month, Tools.todayDate.day)
-  ];
+  List<DateTime?> _rangeDatePickerValueWithDefaultValue = [];
 //4
   Color? bgColor = Tools.themeDark
       ? Tools.colorShuttle['bgcolorDark']
@@ -78,7 +76,23 @@ class CalendarPageState extends State<CalendarPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: bgColor,
-        appBar: AppBar(title: Text(Site.domain)),
+        appBar: AppBar(
+            title: Text(Site.domain, style: const TextStyle(fontSize: 17)),
+            actions: [
+              Stack(children: [
+                const Icon(Icons.message_outlined, size: 32), // Your icon
+                Positioned(
+                    right: 0,
+                    top: 0,
+                    child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: const BoxDecoration(
+                            color: Colors.red, shape: BoxShape.circle),
+                        child: const Text('5', // Your number
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 12))))
+              ])
+            ]),
         body: Center(
             child: Container(
           constraints: const BoxConstraints(maxWidth: 400),
@@ -91,38 +105,6 @@ class CalendarPageState extends State<CalendarPage> {
           ),
         )));
   }
-
-  String _getValueText(
-    CalendarDatePicker2Type datePickerType,
-    List<DateTime?> values,
-  ) {
-    values =
-        values.map((e) => e != null ? DateUtils.dateOnly(e) : null).toList();
-    var valueText = (values.isNotEmpty ? values[0] : null)
-        .toString()
-        .replaceAll('00:00:00.000', '');
-
-    if (datePickerType == CalendarDatePicker2Type.multi) {
-      valueText = values.isNotEmpty
-          ? values
-              .map((v) => v.toString().replaceAll('00:00:00.000', ''))
-              .join(', ')
-          : 'null';
-    } else if (datePickerType == CalendarDatePicker2Type.range) {
-      if (values.isNotEmpty) {
-        final startDate = values[0].toString().replaceAll('00:00:00.000', '');
-        final endDate = values.length > 1
-            ? values[1].toString().replaceAll('00:00:00.000', '')
-            : 'null';
-        valueText = '$startDate to $endDate';
-      } else {
-        return 'null';
-      }
-    }
-
-    return valueText;
-  }
-
 //
 //
 
@@ -148,78 +130,83 @@ class CalendarPageState extends State<CalendarPage> {
 
 //weekly
   Widget weeklyScheduleWithTime() {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const SizedBox(height: 10),
-        Text('Weekly Schedules!',
-            style: TextStyle(
-                fontSize: 30, fontWeight: FontWeight.w900, color: textColor)),
-        const SizedBox(height: 10),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("Days",
-                textAlign: TextAlign.start,
-                style:
-                    TextStyle(fontWeight: FontWeight.bold, color: textColor)),
-            const SizedBox(width: 60),
-            Expanded(
-                child: Text("leave empty for unavailability!",
-                    textAlign: TextAlign.start,
-                    style: TextStyle(color: textColor)))
-          ],
-        ),
+    return Column(mainAxisSize: MainAxisSize.min, children: [
+      const SizedBox(height: 10),
+      Text('Weekly Schedules!',
+          style: TextStyle(
+              fontSize: 30, fontWeight: FontWeight.w900, color: textColor)),
+      const SizedBox(height: 10),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text("Days",
+              textAlign: TextAlign.start,
+              style: TextStyle(fontWeight: FontWeight.bold, color: textColor)),
+          const SizedBox(width: 60),
+          Expanded(
+              child: Text("leave empty for unavailability!",
+                  textAlign: TextAlign.start,
+                  style: TextStyle(color: textColor)))
+        ],
+      ),
 
-        //sunday
-        buildDayRow("Sunday", sundayController, 27),
-        //Monday
-        buildDayRow("Monday", mondayController, 23),
-        //Tuesday
-        buildDayRow("Tuesday", tuesdayController, 20),
-        //Wednesday
-        buildDayRow("Wednesday", wednesdayController, 0),
-        //Thursday
-        buildDayRow("Thursday", thursdayController, 13),
-        //friday
-        buildDayRow("Friday", fridayController, 35),
-        //saturday
-        buildDayRow("Saturday", saturdayController, 16),
+      //sunday
+      buildDayRow("Sunday", sundayController, 27),
+      //Monday
+      buildDayRow("Monday", mondayController, 23),
+      //Tuesday
+      buildDayRow("Tuesday", tuesdayController, 20),
+      //Wednesday
+      buildDayRow("Wednesday", wednesdayController, 0),
+      //Thursday
+      buildDayRow("Thursday", thursdayController, 13),
+      //friday
+      buildDayRow("Friday", fridayController, 35),
+      //saturday
+      buildDayRow("Saturday", saturdayController, 16),
 
-        const SizedBox(height: 15),
-        ElevatedButton(
-            style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.all(19),
-                minimumSize: const Size.fromHeight(19),
-                backgroundColor: Colors.deepOrangeAccent),
-            onPressed: () async {
-              Map<String, dynamic> aasaa = {};
-              aasaa['sunday'] = sundayController.text;
-              aasaa['monday'] = mondayController.text;
-              aasaa['tuesday'] = tuesdayController.text;
-              aasaa['wednesday'] = wednesdayController.text;
-              aasaa['thursday'] = thursdayController.text;
-              aasaa['friday'] = fridayController.text;
-              aasaa['saturday'] = saturdayController.text;
-              //
-              await Tools.httpPost(
-                  {'v': '1', 'updatesWeekly': jsonEncode(aasaa), 'ajr': "a"});
+      const SizedBox(height: 15),
+      ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.all(19),
+              minimumSize: const Size.fromHeight(19),
+              backgroundColor: Colors.deepOrangeAccent),
+          onPressed: () async {
+            Map<String, dynamic> aasaa = {};
+            aasaa['sunday'] = sundayController.text;
+            aasaa['monday'] = mondayController.text;
+            aasaa['tuesday'] = tuesdayController.text;
+            aasaa['wednesday'] = wednesdayController.text;
+            aasaa['thursday'] = thursdayController.text;
+            aasaa['friday'] = fridayController.text;
+            aasaa['saturday'] = saturdayController.text;
+            //
+            await Tools.httpPost(
+                {'v': '1', 'updatesWeekly': jsonEncode(aasaa), 'ajr': "a"});
+
+            if (context.mounted) {
+              Fluttertoast.showToast(
+                  msg: "Weekly Shedule Saved!",
+                  toastLength: Toast.LENGTH_SHORT,
+                  gravity: ToastGravity.BOTTOM,
+                  timeInSecForIosWeb: 1,
+                  backgroundColor: Colors.red,
+                  textColor: Colors.white,
+                  fontSize: 16.0);
               setState(() {});
-              //
-            },
-            child: const Text(
-              "Save weekly Dates...",
-              style: TextStyle(color: Colors.white),
-            )),
-        const SizedBox(height: 29)
-      ],
-    );
+            }
+            //
+          },
+          child: const Text("Save weekly Dates...",
+              style: TextStyle(color: Colors.white, fontSize: 18))),
+      const SizedBox(height: 29)
+    ]);
   }
 
 //specific
   Widget buildDefaultRangeDatePickerWithValue() {
     final config = CalendarDatePicker2Config(
-        calendarType: CalendarDatePicker2Type.range,
+        calendarType: CalendarDatePicker2Type.multi,
         selectedDayHighlightColor: Colors.teal[800],
         weekdayLabelTextStyle:
             TextStyle(color: textColor, fontWeight: FontWeight.bold),
@@ -258,8 +245,9 @@ class CalendarPageState extends State<CalendarPage> {
                 return ListTile(
                   leading:
                       const Icon(Icons.lock_clock_outlined), // Icon on the left
-                  title: Text("Date: ${overridedDates[index]['date']!}",
-                      style: TextStyle(color: textColor)),
+                  title: Text(
+                      "Date: ${Tools.dateIntToDaysMonth(overridedDates[index]['date']!.toString())}",
+                      style: TextStyle(color: textColor, fontSize: 14)),
                   subtitle: Text("Time: ${overridedDates[index]['time']!}",
                       style: TextStyle(color: textColor)),
                   trailing: IconButton(

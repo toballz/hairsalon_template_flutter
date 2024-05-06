@@ -28,7 +28,23 @@ class SettingsPageState extends State<SettingsPage> {
 
     return Scaffold(
         backgroundColor: bgColor,
-        appBar: AppBar(title: Text(Site.domain)),
+        appBar: AppBar(
+            title: Text(Site.domain, style: const TextStyle(fontSize: 17)),
+            actions: [
+              Stack(children: [
+                const Icon(Icons.message_outlined, size: 32), // Your icon
+                Positioned(
+                    right: 0,
+                    top: 0,
+                    child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: const BoxDecoration(
+                            color: Colors.red, shape: BoxShape.circle),
+                        child: const Text('5', // Your number
+                            style:
+                                TextStyle(color: Colors.white, fontSize: 12))))
+              ])
+            ]),
         body: Center(
           child: Container(
             constraints: const BoxConstraints(maxWidth: 400),

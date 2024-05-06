@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:webclient/h.dart';
 
 class ReceiptPage extends StatefulWidget {
@@ -15,8 +16,6 @@ class ReceiptPage extends StatefulWidget {
 }
 
 class ReceiptPageState extends State<ReceiptPage> {
-  final key = GlobalKey<ScaffoldState>();
-
   Map<String, dynamic>? receiptInfo;
   @override
   void initState() {
@@ -35,7 +34,6 @@ class ReceiptPageState extends State<ReceiptPage> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        key: key,
         appBar: AppBar(
           title: const Text("Receipt"),
           leading: IconButton(
@@ -45,7 +43,8 @@ class ReceiptPageState extends State<ReceiptPage> {
               icon: const Icon(Icons.arrow_back_ios_new_outlined)),
         ),
         body: Center(
-            child: Container(padding: const EdgeInsets.all(12),
+            child: Container(
+          padding: const EdgeInsets.all(12),
           constraints: const BoxConstraints(maxWidth: 400),
           child: SingleChildScrollView(
               child: Column(
@@ -73,11 +72,14 @@ class ReceiptPageState extends State<ReceiptPage> {
                                   ? receiptInfo!['phonne'].toString().trim()
                                   : "")))
                           .then((value) {
-                        const snackBar = SnackBar(
-                          content: Text('Phone Number copied!'),
-                        );
-                        ScaffoldMessenger.of(key.currentState!.context)
-                            .showSnackBar(snackBar);
+                        Fluttertoast.showToast(
+                            msg: "Phone number copied!",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 16.0);
                       });
                     },
                     child: Text((receiptInfo != null)
@@ -94,11 +96,14 @@ class ReceiptPageState extends State<ReceiptPage> {
                                   ? receiptInfo!['email'].toString().trim()
                                   : "")))
                           .then((value) {
-                        const snackBar = SnackBar(
-                          content: Text('Email copied!'),
-                        );
-                        ScaffoldMessenger.of(key.currentState!.context)
-                            .showSnackBar(snackBar);
+                        Fluttertoast.showToast(
+                            msg: "Email Copied",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 16.0);
                       });
                     },
                     child: Text((receiptInfo != null)

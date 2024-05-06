@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 /*
       flutter run -d chrome --web-browser-flag "--disable-web-security"
 */
 
 class Site {
-  static String domain = "cocohairsignature.com";
+  //static String domain = "cocohairsignature.com";
+  static String domain = "3b67-172-59-112-200.ngrok-free.app/_null2";
   static String imgDomain = "cocohairsignature.com";
 }
 
@@ -46,4 +48,22 @@ class Tools {
     );
   }
   //
+
+  static String dateIntToDaysMonth(String dateInr) {
+    DateTime date = DateTime.parse(
+        '${dateInr.substring(0, 4)}-${dateInr.substring(4, 6)}-${dateInr.substring(6, 8)}');
+    String formattedDate = DateFormat.yMMMMd('en_US').format(date);
+    String dayOfWeek = DateFormat.EEEE('en_US').format(date);
+    return '$dayOfWeek $formattedDate';
+  }
+
+  static String timeMilitaryToRegular(String timeInr) {
+    String time24Hour = timeInr;
+
+    // Parse the time string into a DateTime object
+    DateTime time = DateFormat.Hm().parse(time24Hour);
+
+    // Format the DateTime object to 12-hour format with AM/PM
+    return DateFormat('hh:mm a').format(time);
+  }
 }
