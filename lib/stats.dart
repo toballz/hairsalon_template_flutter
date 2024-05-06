@@ -205,7 +205,7 @@ class TabletAiiStats extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(12),
       width: 250, // Adjust width as needed
-      height: 150, // Adjust height as needed
+      height: 180, // Adjust height as needed
       color: tabcoloro,
       margin: const EdgeInsets.only(right: 8),
       child: Column(
@@ -222,17 +222,20 @@ class TabletAiiStats extends StatelessWidget {
             Text("\$${NumberFormat("#,##0.00", "en_US").format(grosso)}",
                 style: const TextStyle(color: Colors.white))
           ]),
+          const SizedBox(height: 12),
           Row(children: [
             const Text("Estimated Tax", style: TextStyle(color: Colors.white)),
             const Spacer(),
             Text("- \$${NumberFormat("#,##0.00", "en_US").format(etaxo)}",
                 style: const TextStyle(color: Colors.white))
           ]),
+          const SizedBox(height: 12),
           const Row(children: [
-            Text("Payments %", style: TextStyle(color: Colors.white)),
+            Text("Payments/Person", style: TextStyle(color: Colors.white)),
             Spacer(),
-            Text("\$50.00 each", style: TextStyle(color: Colors.white))
+            Text("\$50.00", style: TextStyle(color: Colors.white))
           ]),
+          const SizedBox(height: 12),
           Row(children: [
             const Text("Net", style: TextStyle(color: Colors.white)),
             const Spacer(),

@@ -106,7 +106,6 @@ class CalendarPageState extends State<CalendarPage> {
         )));
   }
 //
-//
 
 //
 //
@@ -230,14 +229,14 @@ class CalendarPageState extends State<CalendarPage> {
             style: TextStyle(color: textColor)),
         TextField(
             controller: overrideController,
+            keyboardType: TextInputType.number,
             decoration: const InputDecoration(
-                hintText: "1200, 1400, 1430-1500",
+                hintText: "1200, 1400, 1430, 1500",
                 hintStyle: TextStyle(color: Colors.grey),
                 contentPadding: EdgeInsets.all(12))),
         const SizedBox(height: 12),
         SizedBox(
-            height: (overridedDates.length *
-                (MediaQuery.of(context).size.height * 0.1)),
+            height: null,
             child: ListView.builder(
               shrinkWrap: true,
               itemCount: overridedDates.length,
@@ -249,15 +248,20 @@ class CalendarPageState extends State<CalendarPage> {
                       "Date: ${Tools.dateIntToDaysMonth(overridedDates[index]['date']!.toString())}",
                       style: TextStyle(color: textColor, fontSize: 14)),
                   subtitle: Text("Time: ${overridedDates[index]['time']!}",
-                      style: TextStyle(color: textColor)),
+                      style: TextStyle(color: textColor, fontSize: 11)),
                   trailing: IconButton(
                     icon: Icon(Icons.delete_outline, color: textColor),
-                    onPressed: () {
+                    onPressed: () async {
                       if (mounted) {
                         setState(() {
                           overridedDates.removeWhere((map) =>
                               map['date'] == overridedDates[index]['date']! &&
                               map['time'] == overridedDates[index]['time']!);
+                        });
+                        await Tools.httpPost({
+                          "v": '1',
+                          "cat": jsonEncode(overridedDates),
+                          "updateOverrided": "v1"
                         });
                       }
                     },
@@ -268,7 +272,58 @@ class CalendarPageState extends State<CalendarPage> {
             )),
         const SizedBox(height: 35),
         ElevatedButton(
-            onPressed: () {},
+            onPressed: () async {
+              if (overrideController.text.isNotEmpty &&
+                  _rangeDatePickerValueWithDefaultValue != []) {
+                for (var i = 0;
+                    i < _rangeDatePickerValueWithDefaultValue.length;
+                    i++) {
+                  String year =
+                      _rangeDatePickerValueWithDefaultValue[i]!.year.toString();
+                  String month = _rangeDatePickerValueWithDefaultValue[i]!
+                      .month
+                      .toString()
+                      .padLeft(2, '0');
+                  String day = _rangeDatePickerValueWithDefaultValue[i]!
+                      .day
+                      .toString()
+                      .padLeft(2, '0');
+                  //remove if already exists
+                  overridedDates
+                      .removeWhere((map) => map['date'] == "$year$month$day");
+                  // 00
+                  overridedDates.add({
+                    "date": "$year$month$day",
+                    "time": overrideController.text
+                  });
+                }
+                setState(() {
+                  overridedDates = overridedDates;
+                });
+                await Tools.httpPost({
+                  "v": '1',
+                  "cat": jsonEncode(overridedDates),
+                  "updateOverrided": "v1"
+                });
+                Fluttertoast.showToast(
+                    msg: "Date override saved.",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.green,
+                    textColor: Colors.white,
+                    fontSize: 16.0);
+              } else {
+                Fluttertoast.showToast(
+                    msg: "Please Type In a override date & time.",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0);
+              }
+            },
             style: ElevatedButton.styleFrom(
                 minimumSize: const Size.fromHeight(19),
                 padding: const EdgeInsets.all(19),
