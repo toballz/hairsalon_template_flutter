@@ -67,20 +67,20 @@ class ReceiptPageState extends State<ReceiptPage> {
                     style: TextStyle(fontWeight: FontWeight.w600)),
                 TextButton(
                     onPressed: () async {
-                      Clipboard.setData(ClipboardData(
-                              text: ((receiptInfo != null)
-                                  ? receiptInfo!['phonne'].toString().trim()
-                                  : "")))
-                          .then((value) {
-                        Fluttertoast.showToast(
-                            msg: "Phone number copied!",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.BOTTOM,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: Colors.red,
-                            textColor: Colors.white,
-                            fontSize: 16.0);
-                      });
+                      if (receiptInfo != null) {
+                        Clipboard.setData(ClipboardData(
+                                text: receiptInfo!['phonne'].toString().trim()))
+                            .then((value) {
+                          Fluttertoast.showToast(
+                              msg: "Phone number copied!",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.red,
+                              textColor: Colors.white,
+                              fontSize: 16.0);
+                        });
+                      }
                     },
                     child: Text((receiptInfo != null)
                         ? receiptInfo!['phonne'].toString().trim()
@@ -91,32 +91,34 @@ class ReceiptPageState extends State<ReceiptPage> {
                     style: TextStyle(fontWeight: FontWeight.w600)),
                 TextButton(
                     onPressed: () async {
-                      Clipboard.setData(ClipboardData(
-                              text: ((receiptInfo != null)
-                                  ? receiptInfo!['email'].toString().trim()
-                                  : "")))
-                          .then((value) {
-                        Fluttertoast.showToast(
-                            msg: "Email Copied",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.BOTTOM,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: Colors.red,
-                            textColor: Colors.white,
-                            fontSize: 16.0);
-                      });
+                      if (receiptInfo != null) {
+                        Clipboard.setData(ClipboardData(
+                                text: receiptInfo!['email'].toString().trim()))
+                            .then((value) {
+                          Fluttertoast.showToast(
+                              msg: "Email Copied",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.green,
+                              textColor: Colors.white,
+                              fontSize: 16.0);
+                        });
+                      }
                     },
                     child: Text((receiptInfo != null)
                         ? receiptInfo!['email'].toString().trim()
-                        : ""))
+                        : "xxxx@xxx.xx"))
               ]),
               const SizedBox(height: 20),
               Row(children: [
                 const Text("Hairstyle:  ",
                     style: TextStyle(fontWeight: FontWeight.w600)),
-                Text((receiptInfo != null)
-                    ? receiptInfo!['hairstyle']
-                    : "xxxxxx xxxxxxxx xx")
+                Flexible(
+                  child: Text((receiptInfo != null)
+                      ? receiptInfo!['hairstyle']
+                      : "xxxxxx xxxxxxxx xx"),
+                )
               ]),
               const SizedBox(height: 10),
               Row(children: [
@@ -136,7 +138,53 @@ class ReceiptPageState extends State<ReceiptPage> {
                     style: TextStyle(fontWeight: FontWeight.w600)),
                 Text((receiptInfo != null) ? receiptInfo!['time'] : "xx:xx xx")
               ]),
-              const SizedBox(height: 10),
+              const SizedBox(height: 30),
+              ElevatedButton(
+                  onPressed: () {
+                    if (receiptInfo != null) {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                                title: const Text('Confirmation!'),
+                                content: const Text(
+                                    'Do you really want to delete this appointment?\nThis date will be available for other people!'),
+                                actions: <Widget>[
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop(false);
+                                    },
+                                    child: const Text('No'),
+                                  ),
+                                  TextButton(
+                                      onPressed: () async {
+                                        await Tools.httpPost({
+                                          'v': '1',
+                                          'deleteAppointment': '2',
+                                          'ksy': widget.receiptId
+                                        });
+                                        setState(() {
+                                          receiptInfo = null;
+                                        });
+                                        Fluttertoast.showToast(
+                                            msg: "Date Deleted !.",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.BOTTOM,
+                                            timeInSecForIosWeb: 1,
+                                            backgroundColor: Colors.green,
+                                            textColor: Colors.white,
+                                            fontSize: 16.0);
+                                        if (mounted) {
+                                          Navigator.of(context).pop(true);
+                                        }
+                                      },
+                                      child: const Text('Yes'))
+                                ]);
+                          });
+                    }
+                  },
+                  child: const Text("Delete this appointment!",
+                      style: TextStyle(color: Colors.red)))
             ],
           )),
         )),

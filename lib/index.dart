@@ -67,6 +67,7 @@ class IndexPageState extends State<IndexPage> {
 
   Widget _buildDefaultMultiDatePickerWithValue() {
     final config = CalendarDatePicker2Config(
+        firstDate: Tools.todayDate,
         calendarType: CalendarDatePicker2Type.multi,
         selectedDayHighlightColor: Colors.indigo,
         dayTextStyle: TextStyle(color: textColor),

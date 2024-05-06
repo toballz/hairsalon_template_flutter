@@ -82,7 +82,7 @@ class MyHomePageState extends State<MyHomePage> {
                         title: Text("Welcome ${Site.domain}",
                             textAlign: TextAlign.center,
                             style: const TextStyle(
-                                color: Colors.white, fontSize: 16.0)),
+                                color: Colors.white, fontSize: 14.0)),
                         background: Image.network(
                             "https://images.pexels.com/photos/1445327/pexels-photo-1445327.jpeg?auto=compress&cs=tinysrgb&w=600",
                             fit: BoxFit.cover)))

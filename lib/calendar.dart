@@ -205,6 +205,7 @@ class CalendarPageState extends State<CalendarPage> {
 //specific
   Widget buildDefaultRangeDatePickerWithValue() {
     final config = CalendarDatePicker2Config(
+        firstDate: Tools.todayDate,
         calendarType: CalendarDatePicker2Type.multi,
         selectedDayHighlightColor: Colors.teal[800],
         weekdayLabelTextStyle:
@@ -231,7 +232,7 @@ class CalendarPageState extends State<CalendarPage> {
             controller: overrideController,
             keyboardType: TextInputType.number,
             decoration: const InputDecoration(
-                hintText: "1200, 1400, 1430, 1500",
+                hintText: "1200, 1400, 1430, 1500 (military time)",
                 hintStyle: TextStyle(color: Colors.grey),
                 contentPadding: EdgeInsets.all(12))),
         const SizedBox(height: 12),
