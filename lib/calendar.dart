@@ -4,6 +4,7 @@ import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:webclient/h.dart';
+import 'package:webclient/messages_notifications.dart';
 
 //https://pub.dev/packages/calendar_date_picker2/example
 
@@ -29,15 +30,6 @@ class CalendarPageState extends State<CalendarPage> {
   //
   List<DateTime?> _rangeDatePickerValueWithDefaultValue = [];
 //4
-  Color? bgColor = Tools.themeDark
-      ? Tools.colorShuttle['bgcolorDark']
-      : Tools.colorShuttle['bgcolorLight'];
-  Color? tabColor = Tools.themeDark
-      ? Tools.colorShuttle['tabcolorDark']
-      : Tools.colorShuttle['tabcolorLight'];
-  Color? textColor = Tools.themeDark
-      ? Tools.colorShuttle['textcolorDark']
-      : Tools.colorShuttle['textcolorDark Light'];
 //
 
   void getWeeklyANDOverrideDates() async {
@@ -75,12 +67,25 @@ class CalendarPageState extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: bgColor,
+        backgroundColor: ColorPallette.backgroundColor(),
         appBar: AppBar(
-            title: Text(Site.domain, style: const TextStyle(fontSize: 17)),
+            backgroundColor: ColorPallette.backgroundColor(),
+            title: Text(Site.getCurrentUserDomain,
+                style:
+                    TextStyle(fontSize: 17, color: ColorPallette.fontColor())),
             actions: [
               Stack(children: [
-                const Icon(Icons.message_outlined, size: 32), // Your icon
+                IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const MessagesNotification(),
+                          ));
+                    },
+                    icon: Icon(Icons.message_outlined,
+                        size: 32,
+                        color: ColorPallette.fontColor())), // Your icon
                 Positioned(
                     right: 0,
                     top: 0,
@@ -113,7 +118,8 @@ class CalendarPageState extends State<CalendarPage> {
       String day, TextEditingController textcontrolller, double xx) {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       Text(day,
-          style: TextStyle(fontWeight: FontWeight.bold, color: textColor)),
+          style: TextStyle(
+              fontWeight: FontWeight.bold, color: ColorPallette.fontColor())),
       SizedBox(width: xx),
       Expanded(
           child: TextField(
@@ -133,19 +139,23 @@ class CalendarPageState extends State<CalendarPage> {
       const SizedBox(height: 10),
       Text('Weekly Schedules!',
           style: TextStyle(
-              fontSize: 30, fontWeight: FontWeight.w900, color: textColor)),
+              fontSize: 30,
+              fontWeight: FontWeight.w900,
+              color: ColorPallette.fontColor())),
       const SizedBox(height: 10),
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text("Days",
               textAlign: TextAlign.start,
-              style: TextStyle(fontWeight: FontWeight.bold, color: textColor)),
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: ColorPallette.fontColor())),
           const SizedBox(width: 60),
           Expanded(
               child: Text("leave empty for unavailability!",
                   textAlign: TextAlign.start,
-                  style: TextStyle(color: textColor)))
+                  style: TextStyle(color: ColorPallette.fontColor())))
         ],
       ),
 
@@ -208,28 +218,33 @@ class CalendarPageState extends State<CalendarPage> {
         firstDate: Tools.todayDate,
         calendarType: CalendarDatePicker2Type.multi,
         selectedDayHighlightColor: Colors.teal[800],
-        weekdayLabelTextStyle:
-            TextStyle(color: textColor, fontWeight: FontWeight.bold),
+        weekdayLabelTextStyle: TextStyle(
+            color: ColorPallette.fontColor(), fontWeight: FontWeight.bold),
         controlsTextStyle: TextStyle(
-            color: textColor, fontSize: 15, fontWeight: FontWeight.bold),
-        dayTextStyle: TextStyle(color: textColor),
-        yearTextStyle: TextStyle(color: textColor));
+            color: ColorPallette.fontColor(),
+            fontSize: 15,
+            fontWeight: FontWeight.bold),
+        dayTextStyle: TextStyle(color: ColorPallette.fontColor()),
+        yearTextStyle: TextStyle(color: ColorPallette.fontColor()));
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         const SizedBox(height: 10),
         Text('Override A Specific Date?',
             style: TextStyle(
-                fontSize: 25, fontWeight: FontWeight.w900, color: textColor)),
+                fontSize: 25,
+                fontWeight: FontWeight.w900,
+                color: ColorPallette.fontColor())),
         CalendarDatePicker2(
             config: config,
             value: _rangeDatePickerValueWithDefaultValue,
             onValueChanged: (dates) =>
                 setState(() => _rangeDatePickerValueWithDefaultValue = dates)),
         Text('Enter override time(s), leave empty for unavailability!',
-            style: TextStyle(color: textColor)),
+            style: TextStyle(color: ColorPallette.fontColor())),
         TextField(
             controller: overrideController,
+            style: TextStyle(color: ColorPallette.fontColor()),
             keyboardType: TextInputType.number,
             decoration: const InputDecoration(
                 hintText: "1200, 1400, 1430, 1500 (military time)",
@@ -247,11 +262,14 @@ class CalendarPageState extends State<CalendarPage> {
                       const Icon(Icons.lock_clock_outlined), // Icon on the left
                   title: Text(
                       "Date: ${Tools.dateIntToDaysMonth(overridedDates[index]['date']!.toString())}",
-                      style: TextStyle(color: textColor, fontSize: 14)),
+                      style: TextStyle(
+                          color: ColorPallette.fontColor(), fontSize: 14)),
                   subtitle: Text("Time: ${overridedDates[index]['time']!}",
-                      style: TextStyle(color: textColor, fontSize: 11)),
+                      style: TextStyle(
+                          color: ColorPallette.fontColor(), fontSize: 11)),
                   trailing: IconButton(
-                    icon: Icon(Icons.delete_outline, color: textColor),
+                    icon: Icon(Icons.delete_outline,
+                        color: ColorPallette.fontColor()),
                     onPressed: () async {
                       if (mounted) {
                         setState(() {

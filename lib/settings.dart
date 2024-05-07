@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:webclient/astect.dart';
 import 'package:webclient/h.dart';
+import 'package:webclient/messages_notifications.dart';
 import 'package:webclient/profileedit.dart';
 
 //https://www.fluttertemplates.dev/widgets/must_haves/settings_page#settings_page_2
@@ -22,17 +23,28 @@ class SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    Color? bgColor = Tools.themeDark
-        ? Tools.colorShuttle['bgcolorDark']
-        : Tools.colorShuttle['bgcolorLight'];
+    Color? bgColor = ColorPallette.backgroundColor();
 
     return Scaffold(
         backgroundColor: bgColor,
         appBar: AppBar(
-            title: Text(Site.domain, style: const TextStyle(fontSize: 17)),
+            backgroundColor: ColorPallette.backgroundColor(),
+            title: Text(Site.getCurrentUserDomain,
+                style:
+                    TextStyle(fontSize: 17, color: ColorPallette.fontColor())),
             actions: [
               Stack(children: [
-                const Icon(Icons.message_outlined, size: 32), // Your icon
+                IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const MessagesNotification(),
+                          ));
+                    },
+                    icon: Icon(Icons.message_outlined,
+                        size: 32,
+                        color: ColorPallette.fontColor())), // Your icon
                 Positioned(
                     right: 0,
                     top: 0,
@@ -101,16 +113,6 @@ class SettingsPageState extends State<SettingsPage> {
                 _SingleSection(
                   children: [
                     _CustomListTile(
-                        title: "Help & Feedback",
-                        icon: Icons.help_outline_rounded,
-                        onclick: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const HelpPage(),
-                              ));
-                        }),
-                    _CustomListTile(
                         title: "About",
                         icon: Icons.info_outline_rounded,
                         onclick: () {
@@ -124,11 +126,7 @@ class SettingsPageState extends State<SettingsPage> {
                         title: "Sign out",
                         icon: Icons.exit_to_app_rounded,
                         onclick: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const ProfileEditPage(),
-                              ));
+                          Tools.logout(context);
                         }),
                   ],
                 ),
@@ -154,12 +152,9 @@ class _CustomListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color? textColor = Tools.themeDark
-        ? Tools.colorShuttle['textcolorDark']
-        : Tools.colorShuttle['textcolorLight'];
     return ListTile(
-      title: Text(title, style: TextStyle(color: textColor)),
-      leading: Icon(icon, color: textColor),
+      title: Text(title, style: TextStyle(color: ColorPallette.fontColor())),
+      leading: Icon(icon, color: ColorPallette.fontColor()),
       trailing: trailing,
       onTap: onclick,
     );
@@ -177,9 +172,6 @@ class _SingleSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color? textColor = Tools.themeDark
-        ? Tools.colorShuttle['textcolorDark']
-        : Tools.colorShuttle['textcolorLight'];
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -192,7 +184,7 @@ class _SingleSection extends StatelessWidget {
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: textColor),
+                    color: ColorPallette.fontColor()),
               )),
         Column(children: children),
       ],

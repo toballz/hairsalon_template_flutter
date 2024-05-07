@@ -23,16 +23,6 @@ class IndexPageState extends State<IndexPage> {
     //}
   ];
 
-  Color? bgColor = Tools.themeDark
-      ? Tools.colorShuttle['bgcolorDark']
-      : Tools.colorShuttle['bgcolorLight'];
-  Color? tabColor = Tools.themeDark
-      ? Tools.colorShuttle['tabcolorDark']
-      : Tools.colorShuttle['tabcolorLight'];
-  Color? textColor = Tools.themeDark
-      ? Tools.colorShuttle['textcolorDark']
-      : Tools.colorShuttle['textcolorLight'];
-  //
   //
   //
   //
@@ -70,11 +60,13 @@ class IndexPageState extends State<IndexPage> {
         firstDate: Tools.todayDate,
         calendarType: CalendarDatePicker2Type.multi,
         selectedDayHighlightColor: Colors.indigo,
-        dayTextStyle: TextStyle(color: textColor),
+        dayTextStyle: TextStyle(color: ColorPallette.fontColor()),
         controlsTextStyle: TextStyle(
-            color: textColor, fontSize: 15, fontWeight: FontWeight.bold),
-        weekdayLabelTextStyle: TextStyle(color: textColor),
-        yearTextStyle: TextStyle(color: textColor));
+            color: ColorPallette.fontColor(),
+            fontSize: 15,
+            fontWeight: FontWeight.bold),
+        weekdayLabelTextStyle: TextStyle(color: ColorPallette.fontColor()),
+        yearTextStyle: TextStyle(color: ColorPallette.fontColor()));
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -123,7 +115,7 @@ class IndexPageState extends State<IndexPage> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        backgroundColor: bgColor,
+        backgroundColor: ColorPallette.backgroundColor(),
         body: Center(
             child: SingleChildScrollView(
                 physics: const NeverScrollableScrollPhysics(),
@@ -133,7 +125,7 @@ class IndexPageState extends State<IndexPage> {
                     children: [
                       Text("Upcoming Appointments",
                           style: TextStyle(
-                              color: textColor,
+                              color: ColorPallette.fontColor(),
                               fontWeight: FontWeight.w700,
                               fontSize: 22)),
                       _buildDefaultMultiDatePickerWithValue(),
@@ -151,11 +143,13 @@ class IndexPageState extends State<IndexPage> {
                                         height: 650),
                                     title: Text(items[index]['hairname']!,
                                         overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(color: textColor)),
+                                        style: TextStyle(
+                                            color: ColorPallette.fontColor())),
                                     subtitle: Text(items[index]['datetime']!,
-                                        style: TextStyle(color: textColor)),
+                                        style: TextStyle(
+                                            color: ColorPallette.fontColor())),
                                     trailing: Icon(Icons.access_alarms_outlined,
-                                        color: textColor),
+                                        color: ColorPallette.fontColor()),
                                     onTap: () {
                                       Navigator.push(
                                         context,

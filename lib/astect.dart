@@ -18,7 +18,7 @@ class AboutPageState extends State<AboutPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text(Site.domain)),
+        appBar: AppBar(title: Text(Site.getCurrentUserDomain)),
         body: Center(
             child: Container(
           constraints: const BoxConstraints(maxWidth: 400),
@@ -65,7 +65,7 @@ class HelpPageState extends State<HelpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text(Site.domain)),
+        appBar: AppBar(title: Text(Site.getCurrentUserDomain)),
         body: Center(
             child: Container(
           constraints: const BoxConstraints(maxWidth: 400),

@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:webclient/calendar.dart';
 import 'package:webclient/h.dart';
 import 'package:webclient/index.dart';
+import 'package:webclient/profileedit.dart';
 import 'package:webclient/settings.dart';
 import 'package:webclient/stats.dart';
 /*
       flutter run -d chrome --web-browser-flag "--disable-web-security"
 */
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Tools.getReadyAll();
   runApp(const MyApp());
 }
 
@@ -18,10 +21,21 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Navigation Bar',
-      theme: ThemeData(),
-      home: const MyHomePage(),
-    );
+        title: 'Flutter Navigation Bar',
+        theme: ThemeData(),
+        home: FutureBuilder<bool>(
+            future: Tools.isLoggedIn(),
+            builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator();
+              } else {
+                if (snapshot.data == true) {
+                  return const MyHomePage();
+                } else {
+                  return const LoginPage();
+                }
+              }
+            }));
   }
 }
 
@@ -57,20 +71,16 @@ class MyHomePageState extends State<MyHomePage> {
 //
   @override
   Widget build(BuildContext context) {
-    Color? bgColor = Tools.themeDark
-        ? Tools.colorShuttle['bgcolorDark']
-        : Tools.colorShuttle['bgcolorLight'];
-
     return Scaffold(
-      backgroundColor: bgColor,
+      backgroundColor: ColorPallette.backgroundColor(),
       body: <Widget>[
         NestedScrollView(
             headerSliverBuilder:
                 (BuildContext context, bool innerBoxIsScrolled) {
               return <Widget>[
                 SliverAppBar(
-                    foregroundColor: bgColor,
-                    backgroundColor: bgColor,
+                    foregroundColor: ColorPallette.backgroundColor(),
+                    backgroundColor: ColorPallette.backgroundColor(),
                     automaticallyImplyLeading: false,
                     expandedHeight: 250.0,
                     floating: false,
@@ -79,7 +89,7 @@ class MyHomePageState extends State<MyHomePage> {
                     flexibleSpace: FlexibleSpaceBar(
                         centerTitle: true,
                         collapseMode: CollapseMode.parallax,
-                        title: Text("Welcome ${Site.domain}",
+                        title: Text("Welcome ${Site.getCurrentUserDomain}",
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                                 color: Colors.white, fontSize: 14.0)),

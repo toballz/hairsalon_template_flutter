@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:webclient/h.dart';
+import 'package:webclient/messages_notifications.dart';
 
 class StatisticsPage extends StatefulWidget {
   const StatisticsPage({super.key});
@@ -83,24 +84,26 @@ class StatisticsPageState extends State<StatisticsPage> {
 
   @override
   Widget build(BuildContext context) {
-    Color? bgColor = Tools.themeDark
-        ? Tools.colorShuttle['bgcolorDark']
-        : Tools.colorShuttle['bgcolorLight'];
-    Color? tabColor = Tools.themeDark
-        ? Tools.colorShuttle['tabcolorDark']
-        : Tools.colorShuttle['tabcolorLight'];
-    Color? textColor = Tools.themeDark
-        ? Tools.colorShuttle['textcolorDark']
-        : Tools.colorShuttle['textcolorLight'];
-
     return Scaffold(
-        backgroundColor: bgColor,
+        backgroundColor: ColorPallette.backgroundColor(),
         appBar: AppBar(
-            title: Text(Site.domain, style: const TextStyle(fontSize: 17)),
+            backgroundColor: ColorPallette.backgroundColor(),
+            title: Text(Site.getCurrentUserDomain,
+                style:
+                    TextStyle(fontSize: 17, color: ColorPallette.fontColor())),
             actions: [
               Stack(children: [
-                Icon(Icons.message_outlined,
-                    size: 32, color: textColor), // Your icon
+                IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const MessagesNotification(),
+                          ));
+                    },
+                    icon: Icon(Icons.message_outlined,
+                        size: 32,
+                        color: ColorPallette.fontColor())), // Your icon
                 Positioned(
                     right: 0,
                     top: 0,
@@ -126,21 +129,18 @@ class StatisticsPageState extends State<StatisticsPage> {
                       children: <Widget>[
                         TabletAiiStats(
                             titleo: "This Month",
-                            tabcoloro: tabColor!,
                             grosso: thisMonthGross,
                             etaxo: thisMonthEstimatedTax,
                             neto: thisMonthNet),
 
                         TabletAiiStats(
                           titleo: "Last Month",
-                          tabcoloro: tabColor,
                           grosso: lastMonthGross,
                           etaxo: lastMonthEstimatedTax,
                           neto: lastMonthNet,
                         ),
                         TabletAiiStats(
                           titleo: "All till date",
-                          tabcoloro: tabColor,
                           grosso: allMonthGross,
                           etaxo: allMonthEstimatedTax,
                           neto: allMonthNet,
@@ -149,13 +149,14 @@ class StatisticsPageState extends State<StatisticsPage> {
                       ],
                     ),
                   ),
+                  const SizedBox(height: 12),
                   const Divider(),
                   const SizedBox(height: 12),
                   Text("Top 5 hairstyle Booked",
                       style: TextStyle(
                           fontWeight: FontWeight.w600,
                           fontSize: 17,
-                          color: textColor)),
+                          color: ColorPallette.fontColor())),
                   const SizedBox(height: 12),
                   Column(children: [
                     ListView.builder(
@@ -166,13 +167,15 @@ class StatisticsPageState extends State<StatisticsPage> {
                           leading: Image(
                               width: 45,
                               image: NetworkImage(
-                                  "https://${Site.imgDomain}/img/${popularHairstyleBooked![o]['image']}.jpg?93jv")), // Icon on the left
+                                  "https://${Site.getCurrentUserDomain}/img/${popularHairstyleBooked![o]['image']}.jpg?93jv")), // Icon on the left
                           title: Text(popularHairstyleBooked![o]['hairstyle'],
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(color: textColor)),
+                              style:
+                                  TextStyle(color: ColorPallette.fontColor())),
                           subtitle: Text(
                               "${popularHairstyleBooked![o]['appearance_count']}: people booked this",
-                              style: TextStyle(color: textColor)),
+                              style:
+                                  TextStyle(color: ColorPallette.fontColor())),
                           onTap: () {},
                         );
                       },
@@ -187,7 +190,6 @@ class StatisticsPageState extends State<StatisticsPage> {
 //
 class TabletAiiStats extends StatelessWidget {
   final String titleo;
-  final Color tabcoloro;
   final int grosso;
   final double etaxo;
   final double neto;
@@ -195,7 +197,6 @@ class TabletAiiStats extends StatelessWidget {
   const TabletAiiStats(
       {super.key,
       required this.titleo,
-      required this.tabcoloro,
       required this.grosso,
       required this.etaxo,
       required this.neto});
@@ -203,11 +204,22 @@ class TabletAiiStats extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: const EdgeInsets.only(right: 15, bottom: 17, left: 2),
       padding: const EdgeInsets.all(12),
-      width: 250, // Adjust width as needed
-      height: 180, // Adjust height as needed
-      color: tabcoloro,
-      margin: const EdgeInsets.only(right: 8),
+      width: 250,
+      height: 180,
+      decoration: BoxDecoration(
+        color: ColorPallette.tabColor(),
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 3,
+            blurRadius: 7,
+            offset: const Offset(4, 6), // changes position of shadow
+          ),
+        ],
+      ),
       child: Column(
         children: [
           Text(titleo,
@@ -227,20 +239,20 @@ class TabletAiiStats extends StatelessWidget {
             const Text("Estimated Tax", style: TextStyle(color: Colors.white)),
             const Spacer(),
             Text("- \$${NumberFormat("#,##0.00", "en_US").format(etaxo)}",
-                style: const TextStyle(color: Colors.white))
+                style: const TextStyle(color: Colors.redAccent))
           ]),
           const SizedBox(height: 12),
           const Row(children: [
             Text("Payments/Person", style: TextStyle(color: Colors.white)),
             Spacer(),
-            Text("\$50.00", style: TextStyle(color: Colors.white))
+            Text("\$50.00", style: TextStyle(color: Colors.blueAccent))
           ]),
           const SizedBox(height: 12),
           Row(children: [
             const Text("Net", style: TextStyle(color: Colors.white)),
             const Spacer(),
             Text("\$${NumberFormat("#,##0.00", "en_US").format(neto)}",
-                style: const TextStyle(color: Colors.white))
+                style: const TextStyle(color: Colors.greenAccent))
           ])
         ],
       ),
