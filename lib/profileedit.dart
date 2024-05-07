@@ -231,7 +231,7 @@ class LoginPage extends StatelessWidget {
                                     boxShadow: const [
                                       BoxShadow(
                                           color:
-                                              Color.fromARGB(255, 58, 73, 99),
+                                              Color.fromARGB(255, 40, 62, 104),
                                           blurRadius: 20,
                                           offset: Offset(0, 10))
                                     ]),
