@@ -22,16 +22,13 @@ class StatisticsPageState extends State<StatisticsPage> {
   List<dynamic>? popularHairstyleBooked = [];
 
   int thisMonthGross = 0;
-  double thisMonthEstimatedTax = 0;
-  double thisMonthNet = 0;
+  int thisMonthCount = 0;
   //
-  int lastMonthGross = 0;
-  double lastMonthEstimatedTax = 0;
-  double lastMonthNet = 0;
+  int  lastMonthGross = 0;
+  int lastMonthCount = 0;
   //
   int allMonthGross = 0;
-  double allMonthEstimatedTax = 0;
-  double allMonthNet = 0;
+  int allMonthCount = 0;
 
   void getHttpPosters() async {
     String beginingOfMonth =
@@ -60,17 +57,14 @@ class StatisticsPageState extends State<StatisticsPage> {
         popularHairstyleBooked = countStaeeiwts!['popularHairstyleBooked'];
         //print(countStaeeiwts);
 
-        thisMonthGross = int.parse(countStaeeiwts!['beginingOfThisMonth']) * 50;
-        thisMonthEstimatedTax = thisMonthGross - (thisMonthGross * 0.7);
-        thisMonthNet = thisMonthGross - thisMonthEstimatedTax;
+        thisMonthCount = int.parse(countStaeeiwts!['beginingOfThisMonth']);
+        thisMonthGross =  thisMonthCount * 50;
         //
-        lastMonthGross = int.parse(countStaeeiwts!['lastMonth']) * 50;
-        lastMonthEstimatedTax = lastMonthGross - (lastMonthGross * 0.7);
-        lastMonthNet = lastMonthGross - lastMonthEstimatedTax;
+        lastMonthCount = int.parse(countStaeeiwts!['lastMonth']);
+        lastMonthGross =  lastMonthCount * 50;
         //
-        allMonthGross = int.parse(countStaeeiwts!['allToDate']) * 50;
-        allMonthEstimatedTax = allMonthGross - (allMonthGross * 0.7);
-        allMonthNet = allMonthGross - allMonthEstimatedTax;
+        allMonthCount = int.parse(countStaeeiwts!['allToDate']);
+        allMonthGross =  allMonthCount * 50;
       });
     }
   }
@@ -129,21 +123,18 @@ class StatisticsPageState extends State<StatisticsPage> {
                       children: <Widget>[
                         TabletAiiStats(
                             titleo: "This Month",
-                            grosso: thisMonthGross,
-                            etaxo: thisMonthEstimatedTax,
-                            neto: thisMonthNet),
+                            counto: thisMonthCount,
+                            grosso: thisMonthGross),
 
                         TabletAiiStats(
                           titleo: "Last Month",
+                          counto: lastMonthCount,
                           grosso: lastMonthGross,
-                          etaxo: lastMonthEstimatedTax,
-                          neto: lastMonthNet,
                         ),
                         TabletAiiStats(
                           titleo: "All till date",
+                          counto: allMonthCount,
                           grosso: allMonthGross,
-                          etaxo: allMonthEstimatedTax,
-                          neto: allMonthNet,
                         )
                         // Add more containers as needed
                       ],
@@ -190,16 +181,14 @@ class StatisticsPageState extends State<StatisticsPage> {
 //
 class TabletAiiStats extends StatelessWidget {
   final String titleo;
+  final int counto;
   final int grosso;
-  final double etaxo;
-  final double neto;
 
   const TabletAiiStats(
       {super.key,
       required this.titleo,
-      required this.grosso,
-      required this.etaxo,
-      required this.neto});
+      required this.counto,
+      required this.grosso});
 
   @override
   Widget build(BuildContext context) {
@@ -228,32 +217,27 @@ class TabletAiiStats extends StatelessWidget {
                   fontSize: 19,
                   color: Colors.white)),
           const SizedBox(height: 12),
+          const SizedBox(height: 12),
+          Row(children: [
+            const Text("Booked", style: TextStyle(color: Colors.white)),
+            const Spacer(),
+            Text("${NumberFormat("#,###", "en_US").format(counto)} ppl",
+                style: const TextStyle(color: Colors.yellowAccent))
+          ]),
+          const SizedBox(height: 12),
           Row(children: [
             const Text("Gross", style: TextStyle(color: Colors.white)),
             const Spacer(),
             Text("\$${NumberFormat("#,##0.00", "en_US").format(grosso)}",
-                style: const TextStyle(color: Colors.white))
-          ]),
-          const SizedBox(height: 12),
-          Row(children: [
-            const Text("Estimated Tax", style: TextStyle(color: Colors.white)),
-            const Spacer(),
-            Text("- \$${NumberFormat("#,##0.00", "en_US").format(etaxo)}",
-                style: const TextStyle(color: Colors.redAccent))
+                style: const TextStyle(color: Colors.greenAccent))
           ]),
           const SizedBox(height: 12),
           const Row(children: [
-            Text("Payments/Person", style: TextStyle(color: Colors.white)),
+            Text("Price/Person", style: TextStyle(color: Colors.white)),
             Spacer(),
             Text("\$50.00", style: TextStyle(color: Colors.blueAccent))
           ]),
-          const SizedBox(height: 12),
-          Row(children: [
-            const Text("Net", style: TextStyle(color: Colors.white)),
-            const Spacer(),
-            Text("\$${NumberFormat("#,##0.00", "en_US").format(neto)}",
-                style: const TextStyle(color: Colors.greenAccent))
-          ])
+          const SizedBox(height: 12)
         ],
       ),
     );

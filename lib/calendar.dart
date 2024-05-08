@@ -115,19 +115,19 @@ class CalendarPageState extends State<CalendarPage> {
 //
 //
   Widget buildDayRow(
-      String day, TextEditingController textcontrolller, double xx) {
+      String day, TextEditingController textcontrolller ) {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       Text(day,
           style: TextStyle(
               fontWeight: FontWeight.bold, color: ColorPallette.fontColor())),
-      SizedBox(width: xx),
+      SizedBox(width: 21),
       Expanded(
           child: TextField(
               style: const TextStyle(color: Colors.deepOrangeAccent),
               controller: textcontrolller,
               keyboardType: TextInputType.number,
               decoration: const InputDecoration(
-                  hintText: '1200-1500 1400-1600',
+                  hintText: '1200, 1500, 1400, 1600',
                   hintStyle: TextStyle(color: Colors.grey),
                   contentPadding: EdgeInsets.all(12)))),
     ]);
@@ -160,24 +160,24 @@ class CalendarPageState extends State<CalendarPage> {
       ),
 
       //sunday
-      buildDayRow("Sunday", sundayController, 27),
+      buildDayRow("Sun    ", sundayController,  ),
       //Monday
-      buildDayRow("Monday", mondayController, 23),
+      buildDayRow("Mon    ", mondayController,  ),
       //Tuesday
-      buildDayRow("Tuesday", tuesdayController, 20),
+      buildDayRow("Tue     ", tuesdayController,  ),
       //Wednesday
-      buildDayRow("Wednesday", wednesdayController, 0),
+      buildDayRow("Wed    ", wednesdayController,  ),
       //Thursday
-      buildDayRow("Thursday", thursdayController, 13),
+      buildDayRow("Thu     ", thursdayController,  ),
       //friday
-      buildDayRow("Friday", fridayController, 35),
+      buildDayRow("Fri       ", fridayController,  ),
       //saturday
-      buildDayRow("Saturday", saturdayController, 16),
+      buildDayRow("Sat      ", saturdayController,  ),
 
       const SizedBox(height: 15),
       ElevatedButton(
           style: ElevatedButton.styleFrom(
-              padding: const EdgeInsets.all(19),
+              padding: const EdgeInsets.all(14),
               minimumSize: const Size.fromHeight(19),
               backgroundColor: Colors.deepOrangeAccent),
           onPressed: () async {
@@ -208,7 +208,7 @@ class CalendarPageState extends State<CalendarPage> {
           },
           child: const Text("Save weekly Dates...",
               style: TextStyle(color: Colors.white, fontSize: 18))),
-      const SizedBox(height: 29)
+      const SizedBox(height: 24)
     ]);
   }
 
@@ -247,7 +247,7 @@ class CalendarPageState extends State<CalendarPage> {
             style: TextStyle(color: ColorPallette.fontColor()),
             keyboardType: TextInputType.number,
             decoration: const InputDecoration(
-                hintText: "1200, 1400, 1430, 1500 (military time)",
+                hintText: "1200, 1400, 1430, 1500 (24hrs time)",
                 hintStyle: TextStyle(color: Colors.grey),
                 contentPadding: EdgeInsets.all(12))),
         const SizedBox(height: 12),
@@ -324,6 +324,7 @@ class CalendarPageState extends State<CalendarPage> {
                   "cat": jsonEncode(overridedDates),
                   "updateOverrided": "v1"
                 });
+                overrideController.text = "";
                 Fluttertoast.showToast(
                     msg: "Date override saved.",
                     toastLength: Toast.LENGTH_SHORT,

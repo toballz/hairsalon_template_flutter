@@ -55,7 +55,7 @@ class ReceiptPageState extends State<ReceiptPage> {
                   height: 320),
               const SizedBox(height: 20),
               Row(children: [
-                const Text("Name:      ",
+                const Text("Name:        ",
                     style: TextStyle(fontWeight: FontWeight.w600)),
                 Text((receiptInfo != null)
                     ? receiptInfo!['customername'].toString().trim()
@@ -63,7 +63,7 @@ class ReceiptPageState extends State<ReceiptPage> {
               ]),
               const SizedBox(height: 10),
               Row(children: [
-                const Text("Phone:  ",
+                const Text("Phone:    ",
                     style: TextStyle(fontWeight: FontWeight.w600)),
                 TextButton(
                     onPressed: () async {
@@ -87,7 +87,7 @@ class ReceiptPageState extends State<ReceiptPage> {
                         : "(xxx) xxx-xxxx"))
               ]),
               Row(children: [
-                const Text("Email:    ",
+                const Text("Email:      ",
                     style: TextStyle(fontWeight: FontWeight.w600)),
                 TextButton(
                     onPressed: () async {
@@ -128,15 +128,15 @@ class ReceiptPageState extends State<ReceiptPage> {
               ]),
               const SizedBox(height: 10),
               Row(children: [
-                const Text("Date:         ",
+                const Text("Date:          ",
                     style: TextStyle(fontWeight: FontWeight.w600)),
                 Text(widget.dateScheduled)
               ]),
               const SizedBox(height: 10),
               Row(children: [
-                const Text("Time:         ",
+                const Text("Time:          ",
                     style: TextStyle(fontWeight: FontWeight.w600)),
-                Text((receiptInfo != null) ? receiptInfo!['time'] : "xx:xx xx")
+                Text((receiptInfo != null) ?Tools.timeMilitaryToRegular(receiptInfo!['time']): "xx:xx xx")
               ]),
               const SizedBox(height: 30),
               ElevatedButton(

@@ -15,13 +15,8 @@ class IndexPage extends StatefulWidget {
 class IndexPageState extends State<IndexPage> {
   List<DateTime?> _multiDatePickerValueWithDefaultValue = [];
 
-  List<dynamic> items = [
-    //{
-    //'hairname': 'Item 2','orderId':'12',
-    //'datetime': 'Subtitle for Item 2',
-    //'imageUrl': 'https://cocohairsignature.com/img/29.jpg?93jv', // Placeholder image URL
-    //}
-  ];
+  ///{ 'hairname': 'Item 2','orderId':'12', 'datetime': 'Subtitle for Item 2', 'imageUrl': 'https://cocohairsignature.com/img/29.jpg?93jv'}
+  List<dynamic> items = [ ];
 
   //
   //
@@ -65,6 +60,7 @@ class IndexPageState extends State<IndexPage> {
             color: ColorPallette.fontColor(),
             fontSize: 15,
             fontWeight: FontWeight.bold),
+        selectedDayTextStyle: const TextStyle(color:Colors.orangeAccent), 
         weekdayLabelTextStyle: TextStyle(color: ColorPallette.fontColor()),
         yearTextStyle: TextStyle(color: ColorPallette.fontColor()));
     return Column(
@@ -86,9 +82,7 @@ class IndexPageState extends State<IndexPage> {
 
               List<DateTime?> uniDifference =
                   uni2.where((element) => !uni1.contains(element)).toList();
-
-              //print("uni1 $uni1");
-              //print("uni2 $uni2");
+ 
               if (uniDifference.isNotEmpty) {
                 await Tools.httpPost({
                   'v': '1',
@@ -105,7 +99,7 @@ class IndexPageState extends State<IndexPage> {
               }
               //print(uniDifference);
             }),
-        const SizedBox(height: 5),
+        const SizedBox(height: 1),
       ],
     );
   }
@@ -128,40 +122,40 @@ class IndexPageState extends State<IndexPage> {
                               color: ColorPallette.fontColor(),
                               fontWeight: FontWeight.w700,
                               fontSize: 22)),
+                          const  SizedBox(height: 12),
                       _buildDefaultMultiDatePickerWithValue(),
-                      SizedBox(
-                          height: null,
-                          child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: items.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                return ListTile(
-                                    leading: Image(
-                                        image: NetworkImage(
-                                            items[index]['imageUrl']!),
-                                        width: 56,
-                                        height: 650),
-                                    title: Text(items[index]['hairname']!,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                            color: ColorPallette.fontColor())),
-                                    subtitle: Text(items[index]['datetime']!,
-                                        style: TextStyle(
-                                            color: ColorPallette.fontColor())),
-                                    trailing: Icon(Icons.access_alarms_outlined,
-                                        color: ColorPallette.fontColor()),
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => ReceiptPage(
-                                                receiptId: items[index]
-                                                    ['orderId']!,
-                                                dateScheduled: items[index]
-                                                    ['datetime']!)),
-                                      );
-                                    });
-                              })),
+                      ListView.builder(
+                          padding: EdgeInsets.zero,
+                          shrinkWrap: true,
+                          itemCount: items.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return ListTile(
+                                leading: Image(
+                                    image: NetworkImage(
+                                        items[index]['imageUrl']!),
+                                    width: 56,
+                                    height: 650),
+                                title: Text(items[index]['hairname']!,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        color: ColorPallette.fontColor())),
+                                subtitle: Text(items[index]['datetime']!,
+                                    style: TextStyle(
+                                        color: ColorPallette.fontColor())),
+                                trailing: Icon(Icons.access_alarms_outlined,
+                                    color: ColorPallette.fontColor()),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => ReceiptPage(
+                                            receiptId: items[index]
+                                                ['orderId']!,
+                                            dateScheduled: items[index]
+                                                ['datetime']!)),
+                                  );
+                                });
+                          }),
                       const SizedBox(height: 10),
                     ],
                   ),

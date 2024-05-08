@@ -80,37 +80,52 @@ class Tools {
     return '$dayOfWeek $formattedDate';
   }
 
-  static String timeMilitaryToRegular(String timeInr) {
-    String time24Hour = timeInr;
+  static String timeMilitaryToRegular(String timeInr) { 
+    
+    // Parse military time
+    int militaryHour = int.parse(timeInr.substring(0, 2));
+    int militaryMinute = int.parse(timeInr.substring(2, 4));
+ // Format regular time
+    String period = militaryHour < 12 ? 'AM' : 'PM';
+    int regularHour = militaryHour > 12 ? militaryHour - 12 : militaryHour;
+    String regularTime =
+        '${regularHour.toString().padLeft(2, '0')}:${militaryMinute.toString().padLeft(2, '0')} $period';
 
-    // Parse the time string into a DateTime object
-    DateTime time = DateFormat.Hm().parse(time24Hour);
-
-    // Format the DateTime object to 12-hour format with AM/PM
-    return DateFormat('hh:mm a').format(time);
+    return regularTime;
   }
 
   ///domain, password
-  static String login(String domain, String password, BuildContext contex) {
-    RegExp domainRegex = RegExp(r'^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+  static void login(String domain, String password, BuildContext contex) {
+    String realDomain = "cocohairsignature.com";
+    
     //if (domainRegex.hasMatch(domain)) {
-    if (domain.length > 5) {
-      Tools.localstorage.setItem("userDomainId", domain);
-      Navigator.pushReplacement(
-          contex, MaterialPageRoute(builder: (context) => const MyHomePage()));
+    if (domain.length > 5){
+      if( domain == realDomain) {
+        Tools.localstorage.setItem("userDomainId", realDomain);
+        Navigator.pushReplacement(
+            contex, MaterialPageRoute(builder: (context) => const MyHomePage()));
 
-      //httpPost({"v": "1"});
-    } else {
+        //httpPost({"v": "1"});
+      } else {
+        Fluttertoast.showToast(
+            msg: "Your website name is wrong!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.black26,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }
+    }else{
       Fluttertoast.showToast(
-          msg: "Please enter a valid domain !",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.black26,
-          textColor: Colors.white,
-          fontSize: 16.0);
+            msg: "Please enter a valid domain !",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.black26,
+            textColor: Colors.white,
+            fontSize: 16.0);
     }
-    return "";
   }
 
   static void logout(BuildContext contex) {
