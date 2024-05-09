@@ -1,13 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:localstorage/localstorage.dart';
 import 'package:webclient/astect.dart';
 import 'package:webclient/h.dart';
-import 'package:webclient/messages_notifications.dart'; 
+import 'package:webclient/messages_notifications.dart';
 
 //https://www.fluttertemplates.dev/widgets/must_haves/settings_page#settings_page_2
 
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({Key? key}) : super(key: key);
+  const SettingsPage({super.key});
 
   @override
   State<SettingsPage> createState() => SettingsPageState();
@@ -85,14 +86,15 @@ class SettingsPageState extends State<SettingsPage> {
                             onChanged: (value) {
                               if (mounted) {
                                 setState(() {
-                                  Tools.themeDark = !Tools.themeDark;
+                                  localStorage.setItem("themeIsDark",
+                                      (!Tools.themeDark).toString());
                                 });
                               }
                             }),
                         onclick: () {})
                   ],
                 ),
-                const Divider(), 
+                const Divider(),
                 const Text("Made only for COCO HAIR SIGNATURE, LLC"),
                 const Divider(),
                 _SingleSection(
@@ -128,12 +130,11 @@ class _CustomListTile extends StatelessWidget {
   final Widget? trailing;
   final void Function() onclick;
   const _CustomListTile({
-    Key? key,
     required this.title,
     required this.icon,
     this.trailing,
     required this.onclick,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -150,10 +151,9 @@ class _SingleSection extends StatelessWidget {
   final String? title;
   final List<Widget> children;
   const _SingleSection({
-    Key? key,
     this.title,
     required this.children,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

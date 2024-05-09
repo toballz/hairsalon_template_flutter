@@ -14,7 +14,7 @@ class Site {
   //static String domain = "cocohairsignature.com";
   //static String domain = "3b67-172-59-112-200.ngrok-free.app/_null2";
   static String get getCurrentUserDomain {
-    String? th = Tools.localstorage.getItem('userDomainId');
+    String? th = localStorage.getItem('userDomainId');
     return th ?? "";
   }
 }
@@ -41,14 +41,20 @@ class ColorPallette {
 }
 
 class Tools {
-  static bool themeDark = false;
-  static final LocalStorage localstorage = LocalStorage("gjhdafs");
+  static bool get themeDark {
+    String? ii = localStorage.getItem("themeIsDark");
+    if (ii != null) {
+      return ((ii.toLowerCase() == "true") ? true : false);
+    }
+    return false;
+  }
 
   ///yyyymmdd
   static final todayDate = DateUtils.dateOnly(DateTime.now());
 
   static getReadyAll() async {
-    await Tools.localstorage.ready;
+    WidgetsFlutterBinding.ensureInitialized();
+    await initLocalStorage();
   }
 
   static Future<http.Response> httpPost(Map<String, String> dataPost) async {
@@ -80,12 +86,11 @@ class Tools {
     return '$dayOfWeek $formattedDate';
   }
 
-  static String timeMilitaryToRegular(String timeInr) { 
-    
+  static String timeMilitaryToRegular(String timeInr) {
     // Parse military time
     int militaryHour = int.parse(timeInr.substring(0, 2));
     int militaryMinute = int.parse(timeInr.substring(2, 4));
- // Format regular time
+    // Format regular time
     String period = militaryHour < 12 ? 'AM' : 'PM';
     int regularHour = militaryHour > 12 ? militaryHour - 12 : militaryHour;
     String regularTime =
@@ -97,13 +102,13 @@ class Tools {
   ///domain, password
   static void login(String domain, String password, BuildContext contex) {
     String realDomain = "cocohairsignature.com";
-    
+
     //if (domainRegex.hasMatch(domain)) {
-    if (domain.length > 5){
-      if( domain == realDomain) {
-        Tools.localstorage.setItem("userDomainId", realDomain);
-        Navigator.pushReplacement(
-            contex, MaterialPageRoute(builder: (context) => const MyHomePage()));
+    if (domain.length > 5) {
+      if (domain == realDomain) {
+        localStorage.setItem("userDomainId", realDomain);
+        Navigator.pushReplacement(contex,
+            MaterialPageRoute(builder: (context) => const MyHomePage()));
 
         //httpPost({"v": "1"});
       } else {
@@ -116,20 +121,20 @@ class Tools {
             textColor: Colors.white,
             fontSize: 16.0);
       }
-    }else{
+    } else {
       Fluttertoast.showToast(
-            msg: "Please enter a valid domain !",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.black26,
-            textColor: Colors.white,
-            fontSize: 16.0);
+          msg: "Please enter a valid domain !",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.black26,
+          textColor: Colors.white,
+          fontSize: 16.0);
     }
   }
 
   static void logout(BuildContext contex) {
-    Tools.localstorage.deleteItem("userDomainId");
+    localStorage.removeItem("userDomainId");
     Navigator.pushReplacement(
         contex, MaterialPageRoute(builder: (context) => const LoginPage()));
   }
