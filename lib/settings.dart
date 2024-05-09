@@ -2,8 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:webclient/astect.dart';
 import 'package:webclient/h.dart';
-import 'package:webclient/messages_notifications.dart';
-import 'package:webclient/profileedit.dart';
+import 'package:webclient/messages_notifications.dart'; 
 
 //https://www.fluttertemplates.dev/widgets/must_haves/settings_page#settings_page_2
 
@@ -93,22 +92,8 @@ class SettingsPageState extends State<SettingsPage> {
                         onclick: () {})
                   ],
                 ),
-                const Divider(),
-                _SingleSection(
-                  title: "Personal",
-                  children: [
-                    _CustomListTile(
-                        title: "Profile",
-                        icon: Icons.person_outline_rounded,
-                        onclick: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const ProfileEditPage(),
-                              ));
-                        })
-                  ],
-                ),
+                const Divider(), 
+                const Text("Made only for COCO HAIR SIGNATURE, LLC"),
                 const Divider(),
                 _SingleSection(
                   children: [

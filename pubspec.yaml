@@ -41,6 +41,7 @@ dependencies:
   fluttertoast: ^8.2.5
   animate_do: ^3.3.4
   localstorage: ^4.0.1+4
+  firebase_messaging: ^14.9.2
 
 dev_dependencies:
   flutter_test:

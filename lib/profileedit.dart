@@ -29,18 +29,19 @@ class ProfileEditPageState extends State<ProfileEditPage> {
         Container(
           decoration: const BoxDecoration(
               gradient: LinearGradient(colors: [
-            Color(0xFF26CBE6),
-            Color(0xFF26CBC0),
+                  Color.fromARGB(255, 21, 32, 54),
+                  Color.fromARGB(255, 34, 59, 108),
+                  Color.fromARGB(255, 51, 78, 132)
           ], begin: Alignment.topCenter, end: Alignment.center)),
         ),
         Scaffold(
           backgroundColor: Colors.transparent,
-          appBar: AppBar(
-            title: const Text("Account"),
+          appBar: AppBar(backgroundColor:const   Color.fromARGB(255, 25, 45, 91),
+            title: const Text("Account",style: TextStyle(color: Colors.white70)),
             leading: IconButton(
                 onPressed: () {
                   Navigator.pop(context);
-                },
+                },color:Colors.white70 ,
                 icon: const Icon(Icons.arrow_back_ios_new_outlined)),
           ),
           body: Stack(
@@ -110,8 +111,7 @@ class ProfileEditPageState extends State<ProfileEditPage> {
                                 padding: MaterialStateProperty.all<EdgeInsets>(
                                     const EdgeInsets.all(12)),
                                 backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.green)),
+                                    MaterialStateProperty.all<Color>( const Color.fromARGB(255, 25, 45, 91))),
                             onPressed: () {},
                             child: const Center(
                               child: Text('Save Info',
@@ -199,7 +199,7 @@ class LoginPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           FadeInUp(
-                              duration: const Duration(milliseconds: 1000),
+                              duration: const Duration(milliseconds: 1500),
                               child: const Text("Login",
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 40))),
@@ -285,7 +285,7 @@ class LoginPage extends StatelessWidget {
                           height: 40,
                         ),
                         FadeInUp(
-                            duration: const Duration(milliseconds: 1600),
+                            duration: const Duration(milliseconds: 1500),
                             child: MaterialButton(
                                 onPressed: () {
                                   Tools.login(domainController.text,

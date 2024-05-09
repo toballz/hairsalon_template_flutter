@@ -120,7 +120,7 @@ class CalendarPageState extends State<CalendarPage> {
       Text(day,
           style: TextStyle(
               fontWeight: FontWeight.bold, color: ColorPallette.fontColor())),
-      SizedBox(width: 21),
+      const SizedBox(width: 21),
       Expanded(
           child: TextField(
               style: const TextStyle(color: Colors.deepOrangeAccent),
