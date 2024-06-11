@@ -130,13 +130,22 @@ class ReceiptPageState extends State<ReceiptPage> {
               Row(children: [
                 const Text("Date:          ",
                     style: TextStyle(fontWeight: FontWeight.w600)),
-                Text(widget.dateScheduled)
+                Text(
+                  widget.dateScheduled,
+                  style: const TextStyle(
+                      color: Color.fromARGB(255, 116, 225, 120)),
+                )
               ]),
               const SizedBox(height: 10),
               Row(children: [
                 const Text("Time:          ",
                     style: TextStyle(fontWeight: FontWeight.w600)),
-                Text((receiptInfo != null) ?Tools.timeMilitaryToRegular(receiptInfo!['time']): "xx:xx xx")
+                Text(
+                    ((receiptInfo != null)
+                        ? Tools.timeMilitaryToRegular(receiptInfo!['time'])
+                        : "xx:xx xx"),
+                    style: const TextStyle(
+                        color: Color.fromARGB(255, 116, 225, 120)))
               ]),
               const SizedBox(height: 30),
               ElevatedButton(
@@ -174,7 +183,7 @@ class ReceiptPageState extends State<ReceiptPage> {
                                             backgroundColor: Colors.green,
                                             textColor: Colors.white,
                                             fontSize: 16.0);
-                                        if (mounted) {
+                                        if (context.mounted) {
                                           Navigator.of(context).pop(true);
                                         }
                                       },

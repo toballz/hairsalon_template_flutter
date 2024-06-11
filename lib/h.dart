@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -7,16 +9,15 @@ import 'package:webclient/main.dart';
 import 'package:webclient/profileedit.dart';
 
 /*
-      flutter run -d chrome --web-browser-flag "--disable-web-security"
+  flutter run -d chrome --web-browser-flag "--disable-web-security"
 */
 
 class Site {
-  //static String domain = "cocohairsignature.com";
-  //static String domain = "3b67-172-59-112-200.ngrok-free.app/_null2";
-  static String get getCurrentUserDomain {
-    String? th = localStorage.getItem('userDomainId');
-    return th ?? "";
-  }
+  static String getCurrentUserDomain = "cocohairsignature.com/v1.2";
+  // static String get getCurrentUserDomain {
+  //   String? th = localStorage.getItem('userDomainId');
+  //   return th ?? "";
+  // }
 }
 
 ///bgcolorDark,  tabcolorDark,  textcolorDark
@@ -101,26 +102,30 @@ class Tools {
 
   ///domain, password
   static void login(String domain, String password, BuildContext contex) {
-    String realDomain = "cocohairsignature.com";
-
     //if (domainRegex.hasMatch(domain)) {
     if (domain.length > 5) {
-      if (domain == realDomain) {
-        localStorage.setItem("userDomainId", realDomain);
-        Navigator.pushReplacement(contex,
-            MaterialPageRoute(builder: (context) => const MyHomePage()));
-
-        //httpPost({"v": "1"});
-      } else {
-        Fluttertoast.showToast(
-            msg: "Your website name is wrong!",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: Colors.black26,
-            textColor: Colors.white,
-            fontSize: 16.0);
-      }
+      Tools.httpPost({
+        "v": "1",
+        "logine": "0",
+        "password": base64Encode(utf8.encode(password)),
+        "ord": "r"
+      }).then((value) {
+        var tt = jsonDecode(value.body);
+        if (tt!['code'] == 200) {
+          localStorage.setItem("userDomainId", domain);
+          Navigator.pushReplacement(contex,
+              MaterialPageRoute(builder: (context) => const MyHomePage()));
+        } else {
+          Fluttertoast.showToast(
+              msg: tt!['message'] ?? "Error",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.BOTTOM,
+              timeInSecForIosWeb: 1,
+              backgroundColor: Colors.black26,
+              textColor: Colors.white,
+              fontSize: 16.0);
+        }
+      });
     } else {
       Fluttertoast.showToast(
           msg: "Please enter a valid domain !",
@@ -140,12 +145,12 @@ class Tools {
   }
 
   static Future<bool> isLoggedIn() async {
-    if (Site.getCurrentUserDomain == "") {
+    var taa = localStorage.getItem("userDomainId");
+
+    if (taa == null || taa.isEmpty || taa.length < 4) {
       return false;
-    } else if (Site.getCurrentUserDomain.length > 4) {
-      return true;
     } else {
-      return false;
+      return true;
     }
   }
 }

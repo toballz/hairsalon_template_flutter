@@ -24,7 +24,7 @@ class StatisticsPageState extends State<StatisticsPage> {
   int thisMonthGross = 0;
   int thisMonthCount = 0;
   //
-  int  lastMonthGross = 0;
+  int lastMonthGross = 0;
   int lastMonthCount = 0;
   //
   int allMonthGross = 0;
@@ -58,13 +58,13 @@ class StatisticsPageState extends State<StatisticsPage> {
         //print(countStaeeiwts);
 
         thisMonthCount = int.parse(countStaeeiwts!['beginingOfThisMonth']);
-        thisMonthGross =  thisMonthCount * 50;
+        thisMonthGross = thisMonthCount * 50;
         //
         lastMonthCount = int.parse(countStaeeiwts!['lastMonth']);
-        lastMonthGross =  lastMonthCount * 50;
+        lastMonthGross = lastMonthCount * 50;
         //
         allMonthCount = int.parse(countStaeeiwts!['allToDate']);
-        allMonthGross =  allMonthCount * 50;
+        allMonthGross = allMonthCount * 50;
       });
     }
   }
@@ -117,28 +117,19 @@ class StatisticsPageState extends State<StatisticsPage> {
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(12),
                 child: Column(children: [
-                  SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: <Widget>[
-                        TabletAiiStats(
-                            titleo: "This Month",
-                            counto: thisMonthCount,
-                            grosso: thisMonthGross),
-
-                        TabletAiiStats(
-                          titleo: "Last Month",
-                          counto: lastMonthCount,
-                          grosso: lastMonthGross,
-                        ),
-                        TabletAiiStats(
-                          titleo: "All till date",
-                          counto: allMonthCount,
-                          grosso: allMonthGross,
-                        )
-                        // Add more containers as needed
-                      ],
-                    ),
+                  TabletAiiStats(
+                      titleo: "This Month",
+                      counto: thisMonthCount,
+                      grosso: thisMonthGross),
+                  TabletAiiStats(
+                    titleo: "Last Month",
+                    counto: lastMonthCount,
+                    grosso: lastMonthGross,
+                  ),
+                  TabletAiiStats(
+                    titleo: "All till date",
+                    counto: allMonthCount,
+                    grosso: allMonthGross,
                   ),
                   const SizedBox(height: 12),
                   const Divider(),
@@ -193,9 +184,8 @@ class TabletAiiStats extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(right: 15, bottom: 17, left: 2),
+      margin: const EdgeInsets.only(right: 2, bottom: 12, left: 2),
       padding: const EdgeInsets.all(12),
-      width: 250,
       height: 180,
       decoration: BoxDecoration(
         color: ColorPallette.tabColor(),

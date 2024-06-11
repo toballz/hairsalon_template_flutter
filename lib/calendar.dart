@@ -40,6 +40,11 @@ class CalendarPageState extends State<CalendarPage> {
     var overRideResponse =
         await Tools.httpPost({'v': '1', 'getOverrideDates': '2', 'va': "a"});
     var overRideJson = jsonDecode(overRideResponse.body);
+    List<dynamic> filteredListOverridedDates = overRideJson.where((entry) {
+      DateTime entryDate = DateTime.parse(entry['date']!);
+      return entryDate.isAfter(Tools.todayDate) ||
+          entryDate.isAtSameMomentAs(Tools.todayDate);
+    }).toList();
 
     if (mounted) {
       setState(() {
@@ -52,7 +57,9 @@ class CalendarPageState extends State<CalendarPage> {
         saturdayController.text = weeklyDatesJson['saturday'];
         //
         //
-        overridedDates = overRideJson as List<dynamic>;
+        //filter out dates in json lower than today date
+
+        overridedDates = filteredListOverridedDates;
       });
     }
   }
@@ -115,7 +122,7 @@ class CalendarPageState extends State<CalendarPage> {
 //
 //
   Widget buildDayRow(
-      String day, TextEditingController textcontrolller ) {
+      String day, TextEditingController textcontrolller, double paddingLeft) {
     return Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
       Text(day,
           style: TextStyle(
@@ -126,10 +133,12 @@ class CalendarPageState extends State<CalendarPage> {
               style: const TextStyle(color: Colors.deepOrangeAccent),
               controller: textcontrolller,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                  hintText: '1200, 1500, 1400, 1600',
-                  hintStyle: TextStyle(color: Colors.grey),
-                  contentPadding: EdgeInsets.all(12)))),
+              decoration: InputDecoration(
+                hintText: '1200, 1500, 1400, 1600',
+                hintStyle: const TextStyle(color: Colors.grey),
+                contentPadding: EdgeInsets.only(
+                    left: paddingLeft, top: 2, bottom: 2, right: 2),
+              ))),
     ]);
   }
 
@@ -158,21 +167,20 @@ class CalendarPageState extends State<CalendarPage> {
                   style: TextStyle(color: ColorPallette.fontColor())))
         ],
       ),
-
       //sunday
-      buildDayRow("Sun    ", sundayController,  ),
+      buildDayRow("Sun ", sundayController, 12),
       //Monday
-      buildDayRow("Mon    ", mondayController,  ),
+      buildDayRow("Mon", mondayController, 12),
       //Tuesday
-      buildDayRow("Tue     ", tuesdayController,  ),
+      buildDayRow("Tue ", tuesdayController, 13),
       //Wednesday
-      buildDayRow("Wed    ", wednesdayController,  ),
+      buildDayRow("Wed", wednesdayController, 12),
       //Thursday
-      buildDayRow("Thu     ", thursdayController,  ),
+      buildDayRow("Thu ", thursdayController, 12),
       //friday
-      buildDayRow("Fri       ", fridayController,  ),
+      buildDayRow("Fri   ", fridayController, 12),
       //saturday
-      buildDayRow("Sat      ", saturdayController,  ),
+      buildDayRow("Sat ", saturdayController, 14),
 
       const SizedBox(height: 15),
       ElevatedButton(
@@ -230,7 +238,7 @@ class CalendarPageState extends State<CalendarPage> {
       mainAxisSize: MainAxisSize.min,
       children: [
         const SizedBox(height: 10),
-        Text('Override A Specific Date?',
+        Text('Override Specific Date(s)?',
             style: TextStyle(
                 fontSize: 25,
                 fontWeight: FontWeight.w900,

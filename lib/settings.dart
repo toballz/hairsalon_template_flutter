@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
-import 'package:webclient/astect.dart';
 import 'package:webclient/h.dart';
 import 'package:webclient/messages_notifications.dart';
 
@@ -99,16 +98,16 @@ class SettingsPageState extends State<SettingsPage> {
                 const Divider(),
                 _SingleSection(
                   children: [
-                    _CustomListTile(
-                        title: "About",
-                        icon: Icons.info_outline_rounded,
-                        onclick: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const AboutPage(),
-                              ));
-                        }),
+                    // _CustomListTile(
+                    //     title: "About",
+                    //     icon: Icons.info_outline_rounded,
+                    //     onclick: () {
+                    //       Navigator.push(
+                    //           context,
+                    //           MaterialPageRoute(
+                    //             builder: (context) => const AboutPage(),
+                    //           ));
+                    //     }),
                     _CustomListTile(
                         title: "Sign out",
                         icon: Icons.exit_to_app_rounded,
