@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:webclient/h.dart';
-import 'package:webclient/messages_notifications.dart';
 
 //https://www.fluttertemplates.dev/widgets/must_haves/settings_page#settings_page_2
 
@@ -23,103 +22,51 @@ class SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     Color? bgColor = ColorPallette.backgroundColor();
-
     return Scaffold(
         backgroundColor: bgColor,
         appBar: AppBar(
-            backgroundColor: ColorPallette.backgroundColor(),
-            title: Text(Site.getCurrentUserDomain,
-                style:
-                    TextStyle(fontSize: 17, color: ColorPallette.fontColor())),
-            actions: [
-              Stack(children: [
-                IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const MessagesNotification(),
-                          ));
-                    },
-                    icon: Icon(Icons.message_outlined,
-                        size: 32,
-                        color: ColorPallette.fontColor())), // Your icon
-                Positioned(
-                    right: 0,
-                    top: 0,
-                    child: Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: const BoxDecoration(
-                            color: Colors.red, shape: BoxShape.circle),
-                        child: const Text('5', // Your number
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 12))))
-              ])
-            ]),
+          backgroundColor: ColorPallette.backgroundColor(),
+          title: Text(Site.getCurrentUserDomain,
+              style: TextStyle(fontSize: 17, color: ColorPallette.fontColor())),
+        ),
         body: Center(
-          child: Container(
-            constraints: const BoxConstraints(maxWidth: 400),
-            child: ListView(
-              children: [
-                _SingleSection(
-                  title: "General",
-                  children: [
-                    _CustomListTile(
-                        title: "Notifications",
-                        icon: Icons.notifications_active_outlined,
-                        trailing: Switch(
-                            value: notifications,
-                            onChanged: (value) {
-                              if (mounted) {
-                                setState(() {
-                                  notifications = !notifications;
-                                });
-                              }
-                            }),
-                        onclick: () {}),
-                    _CustomListTile(
-                        title: "Light/Dark Mode",
-                        icon: CupertinoIcons.moon,
-                        trailing: Switch(
-                            value: Tools.themeDark,
-                            onChanged: (value) {
-                              if (mounted) {
-                                setState(() {
-                                  localStorage.setItem("themeIsDark",
-                                      (!Tools.themeDark).toString());
-                                });
-                              }
-                            }),
-                        onclick: () {})
-                  ],
-                ),
-                const Divider(),
-                const Text("Made only for COCO HAIR SIGNATURE, LLC"),
-                const Divider(),
-                _SingleSection(
-                  children: [
-                    // _CustomListTile(
-                    //     title: "About",
-                    //     icon: Icons.info_outline_rounded,
-                    //     onclick: () {
-                    //       Navigator.push(
-                    //           context,
-                    //           MaterialPageRoute(
-                    //             builder: (context) => const AboutPage(),
-                    //           ));
-                    //     }),
+            child: Container(
+                constraints: const BoxConstraints(maxWidth: 400),
+                child: ListView(children: [
+                  _SingleSection(
+                    title: "General",
+                    children: [
+                      _CustomListTile(
+                          title: "Light/Dark Mode",
+                          icon: CupertinoIcons.moon,
+                          trailing: Switch(
+                              value: Tools.themeDark,
+                              onChanged: (value) {
+                                if (mounted) {
+                                  setState(() {
+                                    localStorage.setItem("themeIsDark",
+                                        (!Tools.themeDark).toString());
+                                  });
+                                }
+                              }),
+                          onclick: () {})
+                    ],
+                  ),
+                  const Divider(),
+                  Text(
+                    "Made for COCO HAIR SIGNATURE, LLC",
+                    style: TextStyle(color: ColorPallette.fontColor()),
+                  ),
+                  const Divider(),
+                  _SingleSection(children: [
                     _CustomListTile(
                         title: "Sign out",
                         icon: Icons.exit_to_app_rounded,
                         onclick: () {
                           Tools.logout(context);
-                        }),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ));
+                        })
+                  ])
+                ]))));
   }
 }
 

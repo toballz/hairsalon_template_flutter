@@ -4,7 +4,6 @@ import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:webclient/h.dart';
-import 'package:webclient/messages_notifications.dart';
 
 //https://pub.dev/packages/calendar_date_picker2/example
 
@@ -76,35 +75,10 @@ class CalendarPageState extends State<CalendarPage> {
     return Scaffold(
         backgroundColor: ColorPallette.backgroundColor(),
         appBar: AppBar(
-            backgroundColor: ColorPallette.backgroundColor(),
-            title: Text(Site.getCurrentUserDomain,
-                style:
-                    TextStyle(fontSize: 17, color: ColorPallette.fontColor())),
-            actions: [
-              Stack(children: [
-                IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const MessagesNotification(),
-                          ));
-                    },
-                    icon: Icon(Icons.message_outlined,
-                        size: 32,
-                        color: ColorPallette.fontColor())), // Your icon
-                Positioned(
-                    right: 0,
-                    top: 0,
-                    child: Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: const BoxDecoration(
-                            color: Colors.red, shape: BoxShape.circle),
-                        child: const Text('5', // Your number
-                            style:
-                                TextStyle(color: Colors.white, fontSize: 12))))
-              ])
-            ]),
+          backgroundColor: ColorPallette.backgroundColor(),
+          title: Text(Site.getCurrentUserDomain,
+              style: TextStyle(fontSize: 17, color: ColorPallette.fontColor())),
+        ),
         body: Center(
             child: Container(
           constraints: const BoxConstraints(maxWidth: 400),
@@ -152,21 +126,17 @@ class CalendarPageState extends State<CalendarPage> {
               fontWeight: FontWeight.w900,
               color: ColorPallette.fontColor())),
       const SizedBox(height: 10),
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text("Days",
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: ColorPallette.fontColor())),
-          const SizedBox(width: 60),
-          Expanded(
-              child: Text("leave empty for unavailability!",
-                  textAlign: TextAlign.start,
-                  style: TextStyle(color: ColorPallette.fontColor())))
-        ],
-      ),
+      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Text("Days",
+            textAlign: TextAlign.start,
+            style: TextStyle(
+                fontWeight: FontWeight.bold, color: ColorPallette.fontColor())),
+        const SizedBox(width: 60),
+        Expanded(
+            child: Text("leave empty for unavailability!",
+                textAlign: TextAlign.start,
+                style: TextStyle(color: ColorPallette.fontColor())))
+      ]),
       //sunday
       buildDayRow("Sun ", sundayController, 12),
       //Monday
@@ -237,7 +207,7 @@ class CalendarPageState extends State<CalendarPage> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const SizedBox(height: 10),
+        const SizedBox(height: 30),
         Text('Override Specific Date(s)?',
             style: TextStyle(
                 fontSize: 25,
@@ -248,14 +218,18 @@ class CalendarPageState extends State<CalendarPage> {
             value: _rangeDatePickerValueWithDefaultValue,
             onValueChanged: (dates) =>
                 setState(() => _rangeDatePickerValueWithDefaultValue = dates)),
-        Text('Enter override time(s), leave empty for unavailability!',
-            style: TextStyle(color: ColorPallette.fontColor())),
+        const SizedBox(height: 20),
+        Text(
+            'Enter override time(s), leave empty for unavailability!\nSeprate by comma(,)',
+            style: TextStyle(
+              color: ColorPallette.fontColor(),
+            )),
         TextField(
             controller: overrideController,
             style: TextStyle(color: ColorPallette.fontColor()),
             keyboardType: TextInputType.number,
             decoration: const InputDecoration(
-                hintText: "1200, 1400, 1430, 1500 (24hrs time)",
+                hintText: "1100, 1300, 1530 (24hrs time)",
                 hintStyle: TextStyle(color: Colors.grey),
                 contentPadding: EdgeInsets.all(12))),
         const SizedBox(height: 12),
@@ -300,8 +274,7 @@ class CalendarPageState extends State<CalendarPage> {
         const SizedBox(height: 35),
         ElevatedButton(
             onPressed: () async {
-              if (overrideController.text.isNotEmpty &&
-                  _rangeDatePickerValueWithDefaultValue != []) {
+              if (_rangeDatePickerValueWithDefaultValue != []) {
                 for (var i = 0;
                     i < _rangeDatePickerValueWithDefaultValue.length;
                     i++) {

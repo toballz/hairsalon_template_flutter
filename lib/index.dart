@@ -1,7 +1,10 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webclient/h.dart';
 import 'package:webclient/receipt.dart';
 
@@ -16,7 +19,7 @@ class IndexPageState extends State<IndexPage> {
   List<DateTime?> _multiDatePickerValueWithDefaultValue = [];
 
   ///{ 'hairname': 'Item 2','orderId':'12', 'datetime': 'Subtitle for Item 2', 'imageUrl': 'https://cocohairsignature.com/img/29.jpg?93jv'}
-  List<dynamic> items = [ ];
+  List<dynamic> items = [];
 
   //
   //
@@ -60,12 +63,61 @@ class IndexPageState extends State<IndexPage> {
             color: ColorPallette.fontColor(),
             fontSize: 15,
             fontWeight: FontWeight.bold),
-        selectedDayTextStyle: const TextStyle(color:Colors.orangeAccent), 
+        selectedDayTextStyle: const TextStyle(color: Colors.orangeAccent),
         weekdayLabelTextStyle: TextStyle(color: ColorPallette.fontColor()),
         yearTextStyle: TextStyle(color: ColorPallette.fontColor()));
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
+        FutureBuilder<bool>(
+            future: Tools.checkHasSubscription(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator();
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else if (snapshot.hasData && snapshot.data == false) {
+                return Container(
+                    padding: const EdgeInsets.all(12),
+                    margin: const EdgeInsets.all(12),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: Colors.redAccent,
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.5),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset:
+                              const Offset(0, 3), // changes position of shadow
+                        ),
+                      ],
+                    ),
+                    child: Row(children: [
+                      const Text(
+                          "Your subscription ends in 30 days.\nSubscribe now!",
+                          style: TextStyle(
+                              fontSize: 17,
+                              color: Color.fromARGB(234, 255, 255, 255))),
+                      const Spacer(),
+                      IconButton(
+                          onPressed: () async {
+                            if (!await launchUrl(
+                                Uri.parse(Site.monthlyStripePayment))) {
+                              print('Could not launch payment url,');
+                            }
+                          },
+                          icon: const Icon(Icons.arrow_circle_right_outlined),
+                          style: ButtonStyle(
+                              iconSize: MaterialStateProperty.all<double>(34),
+                              iconColor: MaterialStateProperty.all<Color>(
+                                  Colors.white)))
+                    ]));
+              } else {
+                return const Text("");
+              }
+            }),
         CalendarDatePicker2(
             config: config,
             value: _multiDatePickerValueWithDefaultValue,
@@ -82,7 +134,7 @@ class IndexPageState extends State<IndexPage> {
 
               List<DateTime?> uniDifference =
                   uni2.where((element) => !uni1.contains(element)).toList();
- 
+
               if (uniDifference.isNotEmpty) {
                 await Tools.httpPost({
                   'v': '1',
@@ -109,58 +161,54 @@ class IndexPageState extends State<IndexPage> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        backgroundColor: ColorPallette.backgroundColor(),
-        body: Center(
-            child: SingleChildScrollView(
-                physics: const NeverScrollableScrollPhysics(),
-                child: Container(
-                  constraints: const BoxConstraints(maxWidth: 400),
-                  child: Column(
-                    children: [
-                      Text("Upcoming Appointments",
-                          style: TextStyle(
-                              color: ColorPallette.fontColor(),
-                              fontWeight: FontWeight.w700,
-                              fontSize: 22)),
-                          const  SizedBox(height: 12),
-                      _buildDefaultMultiDatePickerWithValue(),
-                      ListView.builder(
-                          padding: EdgeInsets.zero,
-                          shrinkWrap: true,
-                          itemCount: items.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return ListTile(
-                                leading: Image(
-                                    image: NetworkImage(
-                                        items[index]['imageUrl']!),
-                                    width: 56,
-                                    height: 650),
-                                title: Text(items[index]['hairname']!,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        color: ColorPallette.fontColor())),
-                                subtitle: Text(items[index]['datetime']!,
-                                    style: TextStyle(
-                                        color: ColorPallette.fontColor())),
-                                trailing: Icon(Icons.access_alarms_outlined,
-                                    color: ColorPallette.fontColor()),
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => ReceiptPage(
-                                            receiptId: items[index]
-                                                ['orderId']!,
-                                            dateScheduled: items[index]
-                                                ['datetime']!)),
-                                  );
-                                });
-                          }),
-                      const SizedBox(height: 10),
-                    ],
-                  ),
-                ))),
-      ),
+          backgroundColor: ColorPallette.backgroundColor(),
+          body: Center(
+              child: SingleChildScrollView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  child: Container(
+                      constraints: const BoxConstraints(maxWidth: 400),
+                      child: Column(children: [
+                        Text("Upcoming Appointments",
+                            style: TextStyle(
+                                color: ColorPallette.fontColor(),
+                                fontWeight: FontWeight.w700,
+                                fontSize: 22)),
+                        const SizedBox(height: 12),
+                        _buildDefaultMultiDatePickerWithValue(),
+                        ListView.builder(
+                            padding: EdgeInsets.zero,
+                            shrinkWrap: true,
+                            itemCount: items.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return ListTile(
+                                  leading: Image(
+                                      image: NetworkImage(
+                                          items[index]['imageUrl']!),
+                                      width: 56,
+                                      height: 650),
+                                  title: Text(items[index]['hairname']!,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          color: ColorPallette.fontColor())),
+                                  subtitle: Text(items[index]['datetime']!,
+                                      style: TextStyle(
+                                          color: ColorPallette.fontColor())),
+                                  trailing: Icon(Icons.access_alarms_outlined,
+                                      color: ColorPallette.fontColor()),
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ReceiptPage(
+                                              receiptId: items[index]
+                                                  ['orderId']!,
+                                              dateScheduled: items[index]
+                                                  ['datetime']!)),
+                                    );
+                                  });
+                            }),
+                        const SizedBox(height: 10)
+                      ]))))),
     );
   }
 }

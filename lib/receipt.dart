@@ -51,7 +51,7 @@ class ReceiptPageState extends State<ReceiptPage> {
             children: [
               Image(
                   image: NetworkImage(
-                      "http://${Site.getCurrentUserDomain}/img/${(receiptInfo != null) ? receiptInfo!['image'] : "nuul"}.jpg?.12"),
+                      "http://${Site.getCurrentUserDomain}/img/${(receiptInfo != null) ? receiptInfo!['image'] : "nuul"}.jpg?11x2"),
                   height: 320),
               const SizedBox(height: 20),
               Row(children: [

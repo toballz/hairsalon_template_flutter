@@ -13,11 +13,10 @@ import 'package:webclient/profileedit.dart';
 */
 
 class Site {
-  static String getCurrentUserDomain = "cocohairsignature.com/v1.2";
-  // static String get getCurrentUserDomain {
-  //   String? th = localStorage.getItem('userDomainId');
-  //   return th ?? "";
-  // }
+  static String getCurrentUserDomain = "cocohairsignature.com";
+  static String monthlyStripePayment = (1 == 1)
+      ? "https://buy.stripe.com/5kA8xDeI3bYKf7y5kl"
+      : "https://buy.stripe.com/test_fZeg2269k56rbN6aEE";
 }
 
 ///bgcolorDark,  tabcolorDark,  textcolorDark
@@ -61,9 +60,7 @@ class Tools {
   static Future<http.Response> httpPost(Map<String, String> dataPost) async {
     var response = await http.post(
         Uri.parse('https://${Site.getCurrentUserDomain}/i/api.php'),
-        headers: {
-          //'Content-Type': 'application/json',
-        },
+        headers: {},
         body: dataPost);
 
     return response;
@@ -101,27 +98,27 @@ class Tools {
   }
 
   ///domain, password
-  static void login(String domain, String password, BuildContext contex) {
+  static void login(String emaili, String password, BuildContext contex) {
     //if (domainRegex.hasMatch(domain)) {
-    if (domain.length > 5) {
+    if (emaili.length > 5) {
       Tools.httpPost({
         "v": "1",
         "logine": "0",
         "password": base64Encode(utf8.encode(password)),
-        "ord": "r"
+        "email": base64Encode(utf8.encode(emaili.trim()))
       }).then((value) {
         var tt = jsonDecode(value.body);
         if (tt!['code'] == 200) {
-          localStorage.setItem("userDomainId", domain);
+          localStorage.setItem("userEmail", emaili);
           Navigator.pushReplacement(contex,
               MaterialPageRoute(builder: (context) => const MyHomePage()));
         } else {
           Fluttertoast.showToast(
               msg: tt!['message'] ?? "Error",
-              toastLength: Toast.LENGTH_SHORT,
+              toastLength: Toast.LENGTH_LONG,
               gravity: ToastGravity.BOTTOM,
               timeInSecForIosWeb: 1,
-              backgroundColor: Colors.black26,
+              backgroundColor: const Color.fromARGB(66, 74, 54, 54),
               textColor: Colors.white,
               fontSize: 16.0);
         }
@@ -139,18 +136,30 @@ class Tools {
   }
 
   static void logout(BuildContext contex) {
-    localStorage.removeItem("userDomainId");
+    localStorage.removeItem("userEmail");
     Navigator.pushReplacement(
         contex, MaterialPageRoute(builder: (context) => const LoginPage()));
   }
 
   static Future<bool> isLoggedIn() async {
-    var taa = localStorage.getItem("userDomainId");
+    var taa = localStorage.getItem("userEmail");
 
     if (taa == null || taa.isEmpty || taa.length < 4) {
       return false;
     } else {
       return true;
+    }
+  }
+
+//check subscriptions
+  static Future<bool> checkHasSubscription() async {
+    final response = await httpPost(
+        {'v': '1', 'subscribed': '1', 'subscribed1': '2', 'subscribedr': '3'});
+    var af = jsonDecode(response.body);
+    if (af['code'] == 200) {
+      return true;
+    } else {
+      return false;
     }
   }
 }
