@@ -51,7 +51,7 @@ class ReceiptPageState extends State<ReceiptPage> {
             children: [
               Image(
                   image: NetworkImage(
-                      "http://${Site.getCurrentUserDomain}/img/${(receiptInfo != null) ? receiptInfo!['image'] : "nuul"}.jpg?11x2"),
+                      "https://${Site.getCurrentUserDomain}/img/${(receiptInfo != null) ? receiptInfo!['image'] : "nuul"}.jpg?11x2"),
                   height: 320),
               const SizedBox(height: 20),
               Row(children: [
@@ -115,10 +115,9 @@ class ReceiptPageState extends State<ReceiptPage> {
                 const Text("Hairstyle:  ",
                     style: TextStyle(fontWeight: FontWeight.w600)),
                 Flexible(
-                  child: Text((receiptInfo != null)
-                      ? receiptInfo!['hairstyle']
-                      : "xxxxxx xxxxxxxx xx"),
-                )
+                    child: Text((receiptInfo != null)
+                        ? receiptInfo!['hairstyle']
+                        : "xxxxxx xxxxxxxx xx"))
               ]),
               const SizedBox(height: 10),
               Row(children: [
@@ -160,11 +159,10 @@ class ReceiptPageState extends State<ReceiptPage> {
                                     'Do you really want to delete this appointment?\nThis date will be available for other people!'),
                                 actions: <Widget>[
                                   TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop(false);
-                                    },
-                                    child: const Text('No'),
-                                  ),
+                                      onPressed: () {
+                                        Navigator.of(context).pop(false);
+                                      },
+                                      child: const Text('No')),
                                   TextButton(
                                       onPressed: () async {
                                         await Tools.httpPost({

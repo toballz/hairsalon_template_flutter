@@ -1,6 +1,9 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webclient/h.dart';
 
 //https://www.fluttertemplates.dev/widgets/must_haves/settings_page#settings_page_2
@@ -33,30 +36,36 @@ class SettingsPageState extends State<SettingsPage> {
             child: Container(
                 constraints: const BoxConstraints(maxWidth: 400),
                 child: ListView(children: [
-                  _SingleSection(
-                    title: "General",
-                    children: [
-                      _CustomListTile(
-                          title: "Light/Dark Mode",
-                          icon: CupertinoIcons.moon,
-                          trailing: Switch(
-                              value: Tools.themeDark,
-                              onChanged: (value) {
-                                if (mounted) {
-                                  setState(() {
-                                    localStorage.setItem("themeIsDark",
-                                        (!Tools.themeDark).toString());
-                                  });
-                                }
-                              }),
-                          onclick: () {})
-                    ],
-                  ),
+                  _SingleSection(title: "General", children: [
+                    _CustomListTile(
+                        title: "Light/Dark Mode",
+                        icon: CupertinoIcons.moon,
+                        trailing: Switch(
+                            value: Tools.themeDark,
+                            onChanged: (value) {
+                              if (mounted) {
+                                setState(() {
+                                  localStorage.setItem("themeIsDark",
+                                      (!Tools.themeDark).toString());
+                                });
+                              }
+                            }),
+                        onclick: () {}),
+                    _CustomListTile(
+                        title: "View payments - stripe.com",
+                        icon: CupertinoIcons.globe,
+                        trailing: Icon(Icons.arrow_forward_rounded,
+                            color: ColorPallette.fontColor()),
+                        onclick: () async {
+                          if (!await launchUrl(Uri.parse(
+                              "https://dashboard.stripe.com/dashboard"))) {
+                            print('Could not launch payment url,');
+                          }
+                        })
+                  ]),
                   const Divider(),
-                  Text(
-                    "Made for COCO HAIR SIGNATURE, LLC",
-                    style: TextStyle(color: ColorPallette.fontColor()),
-                  ),
+                  Text("Made for COCO HAIR SIGNATURE, LLC",
+                      style: TextStyle(color: ColorPallette.fontColor())),
                   const Divider(),
                   _SingleSection(children: [
                     _CustomListTile(
