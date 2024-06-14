@@ -57,8 +57,19 @@ class SettingsPageState extends State<SettingsPage> {
                         trailing: Icon(Icons.arrow_forward_rounded,
                             color: ColorPallette.fontColor()),
                         onclick: () async {
-                          if (!await launchUrl(Uri.parse(
-                              "https://dashboard.stripe.com/dashboard"))) {
+                          if (!(await launchUrl(Uri.parse(
+                              "https://dashboard.stripe.com/dashboard")))) {
+                            print('Could not launch payment url,');
+                          }
+                        }),
+                    _CustomListTile(
+                        title: "cocohairsignature.com",
+                        icon: CupertinoIcons.globe,
+                        trailing: Icon(Icons.arrow_forward_rounded,
+                            color: ColorPallette.fontColor()),
+                        onclick: () async {
+                          if (!(await launchUrl(
+                              Uri.parse("https://cocohairsignature.com?1")))) {
                             print('Could not launch payment url,');
                           }
                         })
@@ -84,12 +95,11 @@ class _CustomListTile extends StatelessWidget {
   final IconData icon;
   final Widget? trailing;
   final void Function() onclick;
-  const _CustomListTile({
-    required this.title,
-    required this.icon,
-    this.trailing,
-    required this.onclick,
-  });
+  const _CustomListTile(
+      {required this.title,
+      required this.icon,
+      this.trailing,
+      required this.onclick});
 
   @override
   Widget build(BuildContext context) {

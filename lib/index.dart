@@ -66,94 +66,91 @@ class IndexPageState extends State<IndexPage> {
         selectedDayTextStyle: const TextStyle(color: Colors.orangeAccent),
         weekdayLabelTextStyle: TextStyle(color: ColorPallette.fontColor()),
         yearTextStyle: TextStyle(color: ColorPallette.fontColor()));
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        FutureBuilder<bool>(
-            future: Tools.checkHasSubscription(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator();
-              } else if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
-              } else if (snapshot.hasData && snapshot.data == false) {
-                return Container(
-                    padding: const EdgeInsets.all(12),
-                    margin: const EdgeInsets.all(12),
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.redAccent,
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 5,
-                          blurRadius: 7,
-                          offset:
-                              const Offset(0, 3), // changes position of shadow
-                        ),
-                      ],
-                    ),
-                    child: Row(children: [
-                      const Text(
-                          "Your subscription ends in 30 days.\nSubscribe now!",
-                          style: TextStyle(
-                              fontSize: 17,
-                              color: Color.fromARGB(234, 255, 255, 255))),
-                      const Spacer(),
-                      IconButton(
-                          onPressed: () async {
-                            if (!await launchUrl(
-                                Uri.parse(Site.monthlyStripePayment))) {
-                              print('Could not launch payment url,');
-                            }
-                          },
-                          icon: const Icon(Icons.arrow_circle_right_outlined),
-                          style: ButtonStyle(
-                              iconSize: MaterialStateProperty.all<double>(34),
-                              iconColor: MaterialStateProperty.all<Color>(
-                                  Colors.white)))
-                    ]));
-              } else {
-                return const Text("");
-              }
-            }),
-        CalendarDatePicker2(
-            config: config,
-            value: _multiDatePickerValueWithDefaultValue,
-            onValueChanged: (dates) async {
-              var uni1 = dates;
-              var uni2 = _multiDatePickerValueWithDefaultValue;
-              if (uni1.length > uni2.length) {
-                if (mounted) {
-                  setState(() {
-                    _multiDatePickerValueWithDefaultValue = uni2;
-                  });
-                }
-              }
-
-              List<DateTime?> uniDifference =
-                  uni2.where((element) => !uni1.contains(element)).toList();
-
-              if (uniDifference.isNotEmpty) {
-                await Tools.httpPost({
-                  'v': '1',
-                  'getDatesAppointmentsSpecDate': '2',
-                  'dateFrom':
-                      "${uniDifference[0]!.year}${uniDifference[0]!.month.toString().padLeft(2, '0')}${uniDifference[0]!.day.toString().padLeft(2, '0')}"
-                }).then((value) {
-                  if (mounted) {
-                    setState(() {
-                      items = jsonDecode(value.body);
-                    });
-                  }
+    return Column(mainAxisSize: MainAxisSize.min, children: [
+      FutureBuilder<bool>(
+          future: Tools.checkHasSubscription(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const CircularProgressIndicator();
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else if (snapshot.hasData && snapshot.data == false) {
+              return Container(
+                  padding: const EdgeInsets.all(12),
+                  margin: const EdgeInsets.all(12),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.redAccent,
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset:
+                            const Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  child: Row(children: [
+                    const Text(
+                        "Your free trial ends in 28 days.\nSubscribe now!",
+                        style: TextStyle(
+                            fontSize: 17,
+                            color: Color.fromARGB(234, 255, 255, 255))),
+                    const Spacer(),
+                    IconButton(
+                        onPressed: () async {
+                          if (!await launchUrl(
+                              Uri.parse(Site.monthlyStripePayment))) {
+                            print('Could not launch payment url,');
+                          }
+                        },
+                        icon: const Icon(Icons.arrow_circle_right_outlined),
+                        style: ButtonStyle(
+                            iconSize: MaterialStateProperty.all<double>(34),
+                            iconColor:
+                                MaterialStateProperty.all<Color>(Colors.white)))
+                  ]));
+            } else {
+              return const Text("");
+            }
+          }),
+      CalendarDatePicker2(
+          config: config,
+          value: _multiDatePickerValueWithDefaultValue,
+          onValueChanged: (dates) async {
+            var uni1 = dates;
+            var uni2 = _multiDatePickerValueWithDefaultValue;
+            if (uni1.length > uni2.length) {
+              if (mounted) {
+                setState(() {
+                  _multiDatePickerValueWithDefaultValue = uni2;
                 });
               }
-              //print(uniDifference);
-            }),
-        const SizedBox(height: 1),
-      ],
-    );
+            }
+
+            List<DateTime?> uniDifference =
+                uni2.where((element) => !uni1.contains(element)).toList();
+
+            if (uniDifference.isNotEmpty) {
+              await Tools.httpPost({
+                'v': '1',
+                'getDatesAppointmentsSpecDate': '2',
+                'dateFrom':
+                    "${uniDifference[0]!.year}${uniDifference[0]!.month.toString().padLeft(2, '0')}${uniDifference[0]!.day.toString().padLeft(2, '0')}"
+              }).then((value) {
+                if (mounted) {
+                  setState(() {
+                    items = jsonDecode(value.body);
+                  });
+                }
+              });
+            }
+            //print(uniDifference);
+          }),
+      const SizedBox(height: 1)
+    ]);
   }
 
   @override
