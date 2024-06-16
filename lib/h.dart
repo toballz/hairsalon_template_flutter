@@ -15,8 +15,8 @@ import 'package:webclient/profileedit.dart';
 class Site {
   static String getCurrentUserDomain = "cocohairsignature.com";
   static String monthlyStripePayment = (1 == 1)
-      ? "https://buy.stripe.com/5kA8xDeI3bYKf7y5kl"
-      : "https://buy.stripe.com/test_fZeg2269k56rbN6aEE";
+      ? "https://buy.stripe.com/5kA8xDeI3bYKf7y5kl" //real
+      : "https://buy.stripe.com/test_fZeg2269k56rbN6aEE"; //test
 }
 
 ///bgcolorDark,  tabcolorDark,  textcolorDark

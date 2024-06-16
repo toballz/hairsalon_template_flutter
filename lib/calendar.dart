@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:webclient/h.dart';
 
@@ -68,7 +69,31 @@ class CalendarPageState extends State<CalendarPage> {
     super.initState();
     getWeeklyANDOverrideDates();
   }
+
 //
+  void numberformatterOverrides(v, contrroller) {
+    String formattedText =
+        v.replaceAll(RegExp(r'\D'), ''); // Remove non-digit characters
+    if (formattedText.isNotEmpty) {
+      // Insert comma and space every 4 characters
+      StringBuffer buffer = StringBuffer();
+      for (int i = 0; i < formattedText.length; i++) {
+        buffer.write(formattedText[i]);
+        if ((i + 1) % 4 == 0 && i != formattedText.length - 1) {
+          buffer.write(', ');
+        }
+      }
+      contrroller.value = TextEditingValue(
+        text: buffer.toString(),
+        selection: TextSelection.collapsed(offset: buffer.length),
+      );
+    } else {
+      contrroller.value = const TextEditingValue(
+        text: '',
+        selection: TextSelection.collapsed(offset: 0),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -107,6 +132,12 @@ class CalendarPageState extends State<CalendarPage> {
               style: const TextStyle(color: Colors.deepOrangeAccent),
               controller: textcontrolller,
               keyboardType: TextInputType.number,
+              onChanged: (va) {
+                numberformatterOverrides(va, textcontrolller);
+              },
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+              ],
               decoration: InputDecoration(
                 hintText: '1200, 1500, 1400, 1600',
                 hintStyle: const TextStyle(color: Colors.grey),
@@ -133,7 +164,7 @@ class CalendarPageState extends State<CalendarPage> {
                 fontWeight: FontWeight.bold, color: ColorPallette.fontColor())),
         const SizedBox(width: 60),
         Expanded(
-            child: Text("leave empty for unavailability!",
+            child: Text("leave empty for unavailability! (24hrs time)",
                 textAlign: TextAlign.start,
                 style: TextStyle(color: ColorPallette.fontColor())))
       ]),
@@ -219,15 +250,20 @@ class CalendarPageState extends State<CalendarPage> {
             onValueChanged: (dates) =>
                 setState(() => _rangeDatePickerValueWithDefaultValue = dates)),
         const SizedBox(height: 20),
-        Text(
-            'Enter override time(s), leave empty for unavailability!\nSeprate by comma(,)',
+        Text('Enter override time(s), leave empty for unavailability!',
             style: TextStyle(
               color: ColorPallette.fontColor(),
             )),
         TextField(
+            keyboardType: TextInputType.number,
             controller: overrideController,
             style: TextStyle(color: ColorPallette.fontColor()),
-            keyboardType: TextInputType.number,
+            onChanged: (va) {
+              numberformatterOverrides(va, overrideController);
+            },
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+            ],
             decoration: const InputDecoration(
                 hintText: "1100, 1300, 1530 (24hrs time)",
                 hintStyle: TextStyle(color: Colors.grey),

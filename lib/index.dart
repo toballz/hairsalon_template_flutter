@@ -17,6 +17,7 @@ class IndexPage extends StatefulWidget {
 
 class IndexPageState extends State<IndexPage> {
   List<DateTime?> _multiDatePickerValueWithDefaultValue = [];
+  int freeTrialEnds = 0;
 
   ///{ 'hairname': 'Item 2','orderId':'12', 'datetime': 'Subtitle for Item 2', 'imageUrl': 'https://cocohairsignature.com/img/29.jpg?93jv'}
   List<dynamic> items = [];
@@ -27,7 +28,7 @@ class IndexPageState extends State<IndexPage> {
   @override
   void initState() {
     super.initState();
-
+    freeTrialEnds = DateTime(2024, 7, 14).difference(Tools.todayDate).inDays;
     Tools.httpPost({
       'v': '1',
       'getDatesAppointmentsMoreThanDate': '2',
@@ -93,9 +94,9 @@ class IndexPageState extends State<IndexPage> {
                     ],
                   ),
                   child: Row(children: [
-                    const Text(
-                        "Your free trial ends in 28 days.\nSubscribe now!",
-                        style: TextStyle(
+                    Text(
+                        "Your free trial ends in $freeTrialEnds days.\nSubscribe now!",
+                        style: const TextStyle(
                             fontSize: 17,
                             color: Color.fromARGB(234, 255, 255, 255))),
                     const Spacer(),
