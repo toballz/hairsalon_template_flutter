@@ -28,7 +28,7 @@ class IndexPageState extends State<IndexPage> {
   @override
   void initState() {
     super.initState();
-    freeTrialEnds = DateTime(2024, 7, 14).difference(Tools.todayDate).inDays;
+    freeTrialEnds = DateTime(2024, 7, 10).difference(Tools.todayDate).inDays;
     Tools.httpPost({
       'v': '1',
       'getDatesAppointmentsMoreThanDate': '2',
@@ -81,18 +81,15 @@ class IndexPageState extends State<IndexPage> {
                   margin: const EdgeInsets.all(12),
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Colors.redAccent,
-                    borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset:
-                            const Offset(0, 3), // changes position of shadow
-                      ),
-                    ],
-                  ),
+                      color: Colors.redAccent,
+                      borderRadius: const BorderRadius.all(Radius.circular(10)),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: const Offset(0, 3))
+                      ]),
                   child: Row(children: [
                     Text(
                         "Your free trial ends in $freeTrialEnds days.\nSubscribe now!",
