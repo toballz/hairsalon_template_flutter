@@ -25,6 +25,41 @@
         }
     }
     //
+    //?afterReloadPageNavigaTE
+    function changePage(dataPageRef = null) {
+        //print to data-pageswitchref=
+        //button click data-pageswitch=
+        const url = new URL(window.location.href);
+        $('[data-pageswitchref]').css("display", "none");
+        if (dataPageRef !== null) {
+            $('[data-pageswitchref="' + dataPageRef + '"]').css("display", "block");
+        } else if (url.searchParams.has('afterReloadPageNavigaTE')) {
+            $('[data-pageswitchref="' + url.searchParams.get('afterReloadPageNavigaTE') + '"]').css("display", "block");
+        } else {
+            $('[data-pageswitchref="viewappointment"]').css("display", "block");
+        }
+        //scroll
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth' // Optional: adds smooth scrolling effect
+        });
+        // 
+        if (url.searchParams.has("afterReloadPageNavigaTE")) {
+            // Remove the query parameter
+            url.searchParams.delete("afterReloadPageNavigaTE");
+            // Update the URL without reloading the page
+            window.history.replaceState({}, '', url); 
+        }
+    }
+    //
+    function addParam2Url(title,value) {// without reload
+        const url = new URL(window.location.href);
+        // set the query parameter
+        url.searchParams.set(title, value);
+        // Update the URL without reloading the page
+        window.history.replaceState({}, '', url);
+    }
+    //
     //
     var today = new Date(),
         year = today.getFullYear(),
@@ -82,19 +117,17 @@
     }
 
     $(document).ready(function () {
+        changePage();
         ///
         //header
-        $("header").html('<nav class="bg-light navbar navbar-expand-lg navbar-light top-navbar"><div class=container-fluid><a class=navbar-brand href=#>Brand</a> <button aria-controls=navbarNav aria-expanded=false aria-label="Toggle navigation"class=navbar-toggler data-bs-target=#navbarNav data-bs-toggle=collapse type=button><span class=navbar-toggler-icon></span></button><div class="collapse navbar-collapse"id=navbarNav><ul class="mx-auto navbar-nav"><li class=nav-item><a class="nav-link active"href=? aria-current=page>Home</a><li class=nav-item><a class=nav-link href=#>Features</a><li class=nav-item><a class=nav-link href=#>Pricing</a><li class=nav-item><a class="nav-link disabled">Disabled</a></ul></div></div></nav>');
+        $("header").html('<nav class="bg-light navbar navbar-expand-lg navbar-light top-navbar"><div class=container-fluid><a class=navbar-brand href="javascript:void(0);">Brand</a> <button aria-controls=navbarNav aria-expanded=false aria-label="Toggle navigation"class=navbar-toggler data-bs-target=#navbarNav data-bs-toggle=collapse type=button><span class=navbar-toggler-icon></span></button><div class="collapse navbar-collapse"id=navbarNav><ul class="mx-auto navbar-nav"><li class=nav-item><a class="nav-link active" href=? aria-current=page>Home</a><li class=nav-item><a class=nav-link href="javascript:void(0);">Features</a><li class=nav-item><a class=nav-link href="javascript:void(0);">Pricing</a><li class=nav-item><a class="nav-link disabled">Disabled</a></ul></div></div></nav>');
         //footer
-        $("footer").html('<nav class="bg-light bottom-navbar navbar navbar-light"><div class=container><a class=nav-link href=# data-pageswitch=viewappointment><i class="bi bi-house"></i> <span class="d-block navb-fs">Appointments</span> </a><a class=nav-link href=# data-pageswitch=schedules><i class="bi bi-calendar3"></i> <span class="d-block navb-fs">Availability</span> </a><a class=nav-link href=#><i class="bi bi-search"></i> <span class="d-block navb-fs">Stats</span> </a><a class=nav-link href=# data-pageswitch=settings><i class="bi bi-gear"></i> <span class="d-block navb-fs">Settings</span></a></div></nav>');
+        $("footer").html('<nav class="bg-light bottom-navbar navbar navbar-light"><div class=container><a class=nav-link href="javascript:void(0);" data-pageswitch=viewappointment><i class="bi bi-house"></i> <span class="d-block navb-fs">Appointments</span> </a><a class=nav-link href="javascript:void(0);" data-pageswitch=schedules><i class="bi bi-calendar4-week"></i> <span class="d-block navb-fs">Availability</span> </a><a class=nav-link href="javascript:void(0);"><i class="bi bi-bar-chart"></i> <span class="d-block navb-fs">Stats</span> </a><a class=nav-link href="javascript:void(0);" data-pageswitch=settings><i class="bi bi-gear"></i> <span class="d-block navb-fs">Settings</span></a></div></nav>');
         //
         //
         //change pages js
-        $('[data-pageswitchref="viewappointment"]').css("display", "block");
-        $('[data-pageswitch]').click(function () {
-            $('[data-pageswitchref]').css("display", "none");
-            var pageswitchValue = $(this).data("pageswitch");
-            $('[data-pageswitchref="' + pageswitchValue +'"]').css("display","block");
+        $('[data-pageswitch]').click(function () {  
+            changePage($(this).data("pageswitch"));
          });
         //
         //
@@ -276,7 +309,10 @@
                             $('#' + propModal).modal('hide');
                             var toastIdr = $("#" + toastFuncReturnId("success", "Your override schedule has been updated.", "bg-success") + ">div").toast("show");
                             $("#updateoverride").val("");
-                            setTimeout(function () { location.reload(); },1000);
+                            setTimeout(function () {
+                                addParam2Url("afterReloadPageNavigaTE","schedules");
+                                location.reload();
+                            }, 1000);
                          });
                     } else {
                         $('#' + propModal).modal('hide');
