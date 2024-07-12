@@ -1,5 +1,5 @@
 !(function () {
-    var apiC = "https://cocohairsignature.com/i/apim.php", overridedListFromPosted = [], overridecalendarDateSelected="";
+    var apiC = "https://cocohairsignature.com/i/apim.php", overridedListFromPosted = [], overridecalendarDateSelected="",onlineofflineID="";
     function generateDateRanges(e, t, n) { function g(e) { return e.toISOString().split("T")[0] } function l(e, t) { let n = new Date(e); return n.setDate(n.getDate() + t), n } let r = new Date(e), i = new Date(t), u = new Set(n.map(e => new Date(e).getTime())), o = r, a = []; for (; o <= i;)u.has(o.getTime()) || a.push(new Date(o)), o = l(o, 1); let h = [], s = a[0]; for (let _ = 1; _ < a.length; _++)l(a[_ - 1], 1).getTime() !== a[_].getTime() && (h.push([g(s), g(a[_ - 1])]), s = a[_]); return h.push([g(s), g(a[a.length - 1])]), h }
     function getAppointmentListForDate(date, context) {
         var dateSelected = (date[0] === null ? 'null' : date[0].format('YYYYMMDD'));
@@ -68,7 +68,8 @@
         ttodayDatew = year + '' + ((month < 10) ? ('0' + month) : month) + '' + ((day < 10) ? ('0' + day) : day);//yyyymmdd
     //
     //modals
-    function modalFuncReturnId(titlee, boddy, okbtn='', okbtnFunction) {
+    function modalFuncReturnId(modalFuncReturnIdOption) {
+        $(".modal.show").modal('hide');
         $(".modal").remove();
         var idr = "h6b6w8"+Math.round(Math.random() * 10001);
         $("body").append(`
@@ -76,23 +77,23 @@
               <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title" id="${idr}Label">${titlee.trim()}</h5>
+                    <h5 class="modal-title" id="${idr}Label">${modalFuncReturnIdOption.title.trim()}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
-                  <div class="modal-body">${boddy.trim()}</div>
+                  <div class="modal-body">${modalFuncReturnIdOption.body.trim()}</div>
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    `+ ((okbtn.trim().length>0)?`<button type="button" class="btn btn-primary" id="modalOkBtn_${idr}">${okbtn}</button>`:``)+`
+                    `+ ((modalFuncReturnIdOption.closebtn && modalFuncReturnIdOption.closebtn != false) ? `<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>` : ``) +`
+                    `+ ((modalFuncReturnIdOption.okbtn) ? `<button type="button" class="btn btn-primary" id="modalOkBtn_${idr}">${modalFuncReturnIdOption.okbtn}</button>`:``)+`
                   </div>
                 </div>
               </div>
             </div>`);
 
         $(`#modalOkBtn_${idr}`).on('click', function () {
-             if (typeof okbtnFunction === 'function') {
-                okbtnFunction();
+            if (typeof modalFuncReturnIdOption.okbtnFunc === 'function') {
+                modalFuncReturnIdOption.okbtnFunc();
             } else {
-                 eval(okbtnFunction);
+                eval(modalFuncReturnIdOption.okbtnFunc);
             }
         });
         return idr;
@@ -116,18 +117,53 @@
         return toastId;
     }
 
+
+window.addEventListener('online', () => { 
+    location.reload();
+});
+    window.addEventListener('offline', () => {
+
+        addParam2Url("afterReloadPageNavigaTE", "schedules");
+    onlineofflineID = modalFuncReturnId({
+        title: "Alert",
+        body: "You are offline.",
+        okbtn: "Retry",
+        okbtnFunc: function () { return; } 
+    });
+    $("#" + onlineofflineID).modal("show");
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     $(document).ready(function () {
         changePage();
         ///
         //header
-        $("header").html('<nav class="bg-light navbar navbar-expand-lg navbar-light top-navbar"><div class=container-fluid><a class=navbar-brand href="javascript:void(0);">Brand</a> <button aria-controls=navbarNav aria-expanded=false aria-label="Toggle navigation"class=navbar-toggler data-bs-target=#navbarNav data-bs-toggle=collapse type=button><span class=navbar-toggler-icon></span></button><div class="collapse navbar-collapse"id=navbarNav><ul class="mx-auto navbar-nav"><li class=nav-item><a class="nav-link active" href=? aria-current=page>Home</a><li class=nav-item><a class=nav-link href="javascript:void(0);">Features</a><li class=nav-item><a class=nav-link href="javascript:void(0);">Pricing</a><li class=nav-item><a class="nav-link disabled">Disabled</a></ul></div></div></nav>');
+        $("header").html('<nav class="bg-light navbar navbar-expand-lg navbar-light top-navbar"><div class=container-fluid><a class=navbar-brand href="javascript:void(0);">cocohairsignature.com</a> <button aria-controls=navbarNav aria-expanded=false aria-label="Toggle navigation"class=navbar-toggler data-bs-target=#navbarNav data-bs-toggle=collapse type=button><span class=navbar-toggler-icon></span></button><div class="collapse navbar-collapse"id=navbarNav><ul class="mx-auto navbar-nav"><li class=nav-item><a class="nav-link active" href=? aria-current=page>Home</a><li class=nav-item><a class=nav-link href="javascript:void(0);">Features</a><li class=nav-item><a class=nav-link href="javascript:void(0);">Pricing</a><li class=nav-item><a class="nav-link disabled">Disabled</a></ul></div></div></nav>');
         //footer
         $("footer").html('<nav class="bg-light bottom-navbar navbar navbar-light"><div class=container><a class=nav-link href="javascript:void(0);" data-pageswitch=viewappointment><i class="bi bi-house"></i> <span class="d-block navb-fs">Appointments</span> </a><a class=nav-link href="javascript:void(0);" data-pageswitch=schedules><i class="bi bi-calendar4-week"></i> <span class="d-block navb-fs">Availability</span> </a><a class=nav-link href="javascript:void(0);"><i class="bi bi-bar-chart"></i> <span class="d-block navb-fs">Stats</span> </a><a class=nav-link href="javascript:void(0);" data-pageswitch=settings><i class="bi bi-gear"></i> <span class="d-block navb-fs">Settings</span></a></div></nav>');
         //
         //
         //change pages js
-        $('[data-pageswitch]').click(function () {  
-            changePage($(this).data("pageswitch"));
+        $('[data-pageswitch]').click(function () {   
+            var fa = $(this).data("pageswitch");
+            changePage(fa);
+            addParam2Url("afterReloadPageNavigaTE", fa);
          });
         //
         //
@@ -236,18 +272,22 @@
                 //
                 //delete override date
                 $('[data-overrided-delete]').click(function () {
-                    var tthis = $(this);
-                    var propModal = "#" +modalFuncReturnId("Alert", "Do you want to delete this override.", "Delete",
-                        function () {
+                    var data_overrided_delete_tthis = $(this);
+                    var propModal = "#" + modalFuncReturnId({
+                        title: "Alert",
+                        body: "Do you want to delete this override.",
+                        okbtn: "Delete",
+                        okbtnFunc: function () {
                             overridedListFromPosted = $.grep(overridedListFromPosted, function (obj) {
-                                return obj.date !== tthis.data("data-overrided-delete");
+                                return obj.date !== data_overrided_delete_tthis.data("data-overrided-delete");
                             });
                             $.post(apiC, { cros: 1, cat: JSON.stringify(overridedListFromPosted), updateOverrided: 'v1' }, function () {
                                 var toastIdr = $("#" + toastFuncReturnId("success", "Your override schedule has been updated.", "bg-success") + ">div").toast("show");
                                 $(propModal).modal("hide");
-                                tthis.parent().remove();
+                                data_overrided_delete_tthis.parent().remove();
                             });
-                        });
+                        }
+                    });
                     $(propModal).modal("show");
                 });
             });
@@ -256,8 +296,11 @@
         //
         //save weekly schedules dates post
         $(".saveweeklyschedules").click(function () {
-            var propModal = modalFuncReturnId("Alert", "Do you want to save your new weekly schedules.", "Save Updates",
-                function () { //submit updates
+            var propModal = modalFuncReturnId({
+                title: "Alert",
+                body: "Do you want to save your new weekly schedules.",
+                okbtn: "Save Updates",
+                okbtnFunc: function () { //submit updates
                     var dataArray = {}, err = false;
                     $(".schld-days-ofweek input").each(function () {
                         var id = $(this).attr("id"); // Get the id attribute of the input
@@ -269,14 +312,15 @@
                     });
                     if (!err) {
                         $.post(apiC, { cros: 1, updatesWeekly: JSON.stringify(dataArray), ajr: 'a' }, function () {
-                            $('#' + propModal).modal('hide');
-                            var toastIdr = $("#" + toastFuncReturnId("success", "your weekly schedule has been updated.", "bg-success") + ">div").toast("show");
+                            //$('#' + propModal).modal('hide');
+                            var toastIdr = $("#" + toastFuncReturnId("success", "Your weekly schedule has been updated.", "bg-success") + ">div").toast("show");
                         });
                     } else {
-                        $('#' + propModal).modal('hide');
-                        var modalIdr = $('#' + modalFuncReturnId("Alert", "Input valid 24hrs time seperated by comma ( , )")).modal('show');
-                     }
-                });
+                        //$('#' + propModal).modal('hide');
+                        var modalIdr = $('#' + modalFuncReturnId({ title: "Alert", body: "Input valid 24hrs time seperated by comma ( , )" })).modal('show');
+                    }
+                }
+            });
             $('#' + propModal).modal('show');
         });
 
@@ -288,8 +332,11 @@
         //
         // //submit updates save add override dates post
         $(".addoverridebtnclick").click(function () {
-            var propModal = modalFuncReturnId("Alert", "Do you want save and override the selected dates.", "Save Override",
-                function () {
+            var propModal = modalFuncReturnId({
+                title: "Alert",
+                body: "Do you want save and override the selected dates.",
+                okbtn: "Save Override",
+                okbtnFunc: function () {
 
                     var err = false, overrideValueTime = $("#updateoverride").val(), checkIfDate2updateExists = false;
                     // Get the value of the input
@@ -306,20 +353,20 @@
                         if (!checkIfDate2updateExists) { overridedListFromPosted.push({ "date": overridecalendarDateSelected, "time": overrideValueTime }); }
 
                         $.post(apiC, { cros: 1, cat: JSON.stringify(overridedListFromPosted), updateOverrided: 'v1' }, function () {
-                            $('#' + propModal).modal('hide');
+                            //$('#' + propModal).modal('hide');
                             var toastIdr = $("#" + toastFuncReturnId("success", "Your override schedule has been updated.", "bg-success") + ">div").toast("show");
                             $("#updateoverride").val("");
                             setTimeout(function () {
-                                addParam2Url("afterReloadPageNavigaTE","schedules");
                                 location.reload();
-                            }, 1000);
-                         });
+                            }, 890);
+                        });
                     } else {
-                        $('#' + propModal).modal('hide');
-                        var modalIdr = $('#' + modalFuncReturnId("Alert", "Input valid 24hrs time seperated by comma ( , )")).modal('show');
+                        //$('#' + propModal).modal('hide');
+                        var modalIdr = $('#' + modalFuncReturnId(
+                            { title: "Alert", body: "Input valid 24hrs time seperated by comma ( , )" })).modal('show');
                     }
-
-                });
+                }
+            });
             $('#' + propModal).modal('show');
         }); 
 
