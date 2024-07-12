@@ -1,0 +1,5 @@
+version=1.0.0
+
+install = index.html || bootstrap_5.3.3.min.css || css.css || js.js || jq.js || favicon.ico || 
+	datepicker4/css/pignose.calendar.min.css || datepicker4/js/pignose.calendar.full.min.js ||
+	datepicker4/js/pignose.calendar.min.js || datepicker4 || datepicker4

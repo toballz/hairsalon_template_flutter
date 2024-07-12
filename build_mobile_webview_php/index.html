@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!--
+        title
+        base
+        favicon
+        theme-color
+    -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <!-- e -->
+    <title> </title>
+    <base href="./">
+    <link rel="shortcut icon" href="./favicon.ico">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <!-- 1 -->
+    <!--
+    <meta content="dark" name="color-scheme">
+    <meta http-equiv="refresh" content="660">
+    -->
+    <meta name="theme-color" content="#151d3d">
+    <!-- a -->
+    <script type="text/javascript" src="./jq.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="./bootstrap_5.3.3.min.css">
+    <link rel="stylesheet" href="./datepicker4/css/pignose.calendar.min.css">
+    <link rel="stylesheet" href="./css.css">
+    <!-- t -->
+    <style type="text/css">
+        body { 
+        }
+        .bottom-navbar {
+            position: fixed;
+            bottom: 0;
+            width: 100%;z-index: 6;
+            justify-content: space-around;
+        }
+        footer{margin-top:7rem;}
+
+        .top-navbar {
+            position: relative;
+        }
+        [data-pageswitchref]{display:none;}
+        .nav-item {
+            flex: 1;
+            text-align: center;
+        }
+        .nav-link{text-align:center;font-weight:600;flex:1;}
+        .bi {
+            font-size: 19px;
+            padding-right: 5px;
+            padding-left: 5px;
+        } 
+        .list-group.settingsj > a {
+            padding: 15px;
+        }
+        .settingsj-sunmoon{}
+        .settingsj-sunmoon{display:flex;justify-content:space-between;}
+        .schld-days-ofweek{display:flex;align-items:center;margin-bottom:12px}
+        .schld-days-ofweek>label {
+          flex: 0 0 100px; /* Fixed width for labels */
+          margin-bottom: 0;
+        }
+        .schld-days-ofweek> input {
+          flex: 1;color:blue !important;
+        }
+        .pignose-calendar {
+            width: 100% !important;
+            max-width:100%;
+        }
+        .navb-fs{font-size:12px !important }
+    </style>
+    <script>;</script> 
+
+</head>
+
+
+
+<body>
+
+    <header></header>
+
+
+
+    <main data-pageviewer="main">
+
+        <!-- home / view appointments   -->
+        <section data-pageswitchref="viewappointment">
+            <div class="container mt-5">
+                <h2 style="text-align:center;">Upcoming Appointments</h2>
+                <div class="mt-4" id="viewappointmentpage"></div>
+                <div class="viewappointmentlist mt-5"> </div>
+            </div>
+        </section>
+
+
+
+        <!-- schedules -->
+        <section data-pageswitchref="schedules">
+            <div class="container mt-5">
+                <div class="container mt-5">
+
+                    <!-- schedules -->
+                    <!-- weekly schedules -->
+                    <h2>Weekly schedules</h2>
+                    <p>Leave empty for unavailability (24hrs clock)</p>
+
+                    <div class="form-group schld-days-ofweek">
+                        <label for="sunday">Sunday:</label>
+                        <input placeholder="0845, 1230, 1540, 2000, 0000" type="text" class=" form-control" id="sunday" name="sunday">
+                    </div>
+                    <div class="form-group schld-days-ofweek">
+                        <label for="monday">Monday:</label>
+                        <input placeholder="0845, 1230, 1540, 2000, 0000" type="text" class=" form-control" id="monday" name="monday">
+                    </div>
+                    <div class="form-group schld-days-ofweek">
+                        <label for="tuesday">Tuesday:</label>
+                        <input placeholder="0845, 1230, 1540, 2000, 0000" type="text" class=" form-control" id="tuesday" name="monday">
+                    </div>
+                    <div class="form-group schld-days-ofweek">
+                        <label for="wednesday">Wednesday:</label>
+                        <input placeholder="0845, 1230, 1540, 2000, 0000" type="text" class=" form-control" id="wednesday" name="monday">
+                    </div>
+                    <div class="form-group schld-days-ofweek">
+                        <label for="thursday">Thursday:</label>
+                        <input placeholder="0845, 1230, 1540, 2000, 0000" type="text" class=" form-control" id="thursday" name="monday">
+                    </div>
+                    <div class="form-group schld-days-ofweek">
+                        <label for="friday">Friday:</label>
+                        <input placeholder="0845, 1230, 1540, 2000, 0000" type="text" class=" form-control" id="friday" name="monday">
+                    </div>
+                    <div class="form-group schld-days-ofweek">
+                        <label for="saturday">Saturday:</label>
+                        <input placeholder="0845, 1230, 1540, 2000, 0000" type="text" class="form-control" id="saturday" name="monday">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 mt-3 p-3 saveweeklyschedules" >Update Weekly</button>
+
+                    <!-- schedules -->
+                    <!-- override schedules -->
+                    <h2 class="mt-5">Override Schedules</h2>
+                    <div class="mt-4" id="overridecalendar"></div>
+                    <p class="mt-4">Click a date and enter only the time(s) you will be available for the date picked.<br /><br />Leave empty for unavailability (24hrs clock)</p> 
+
+                    <input type="text" placeholder="0920, 1230, 1400,1845" class="text-success form-control mb-2" id="updateoverride" name="updateoverride" />
+
+                    <ul class="list-group overrideitemslist"> </ul>
+
+                    <button type="submit" class="btn btn-primary w-100 mt-3 p-3 addoverridebtnclick">Add Override</button>
+
+
+                </div>
+            </div>
+        </section>
+
+
+        <!-- settings   -->
+        <section data-pageswitchref="settings">
+            <div class="container mt-5">
+                <div class="list-group settingsj">
+                    <a href="#" class="list-group-item list-group-item-action settingsj-sunmoon">
+                        <span><i class="bi bi-moon"></i> Light / Dark Mode</span> <i class="bi bi-toggle-on"></i>
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action settingsj-sunmoon" ">
+                        <span><i class="bi bi-bell"></i> Notifications </span> <i class="bi bi-toggle-on"></i>
+                    </a>
+
+                    <br />
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <i class="bi bi-globe"></i> View payments - stripe.com
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <i class="bi bi-globe"></i> cocohairsignature.com
+                    </a>
+                    <br />
+
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <i class="bi bi-person"></i> Profile
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action">
+                        <i class="bi bi-box-arrow-right"></i> Sign Out
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+  
+
+
+    <footer></footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./datepicker4/js/pignose.calendar.full.min.js?@11x4s"></script>
+
+    <script src="./js.js?hagfh"></script>
+
+</body>
+</html>
