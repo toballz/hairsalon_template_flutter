@@ -27,61 +27,27 @@
                         var data_sh_orderid_tthis = $(this), dda = $(data_sh_orderid_tthis).attr("data-sh-orderid");
 
                         $.post(apiC, { cros: "getterCross", receiptIIinfo: dda.trim(), j: "1" }, function (da) {
+                            var idr = "receiptiddelete" + Math.round(Math.random() * 101001);
                             $(".modal.show").modal('hide');
                             $(".modal").remove();
-                            $("body").append(`
-                            <div class="modal fade" id="iia" data-bs-backdrop=static data-bs-keyboard=false tabindex="-1" aria-labelledby="iia_Label" aria-hidden="true">
-                              <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                                <div class="modal-content">
-                                  <div class="modal-header">
-                                    <h5 class="modal-title" id="iia_Label">Receipt</h5>
-                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> 
-                                  </div>
-                                  <div class="modal-body">
-                                    <div class="w-100 ">
-                                        <img class="w-100" style="padding-left:50px;padding-right:50px; " src="https://cocohairsignature.com/img/5.jpg" />
-                                    </div>
-                                        <ul class="list-group mt-3 listeceiptul">
-                                            <li>
-                                                <span>Name</span>
-                                                <span>${da.customername}</span>
-                                            </li>
-                                            <li>
-                                                <span>Phone</span>
-                                                <span style="color:blue;" onclick="try{navigator.clipboard.writeText('${da.phonne}');window.location.href = 'tel:${da.phonne}';}catch (err) {console.log('cant copy');}">${da.phonne}</span>
-                                            </li>
-                                            <li>
-                                                <span>Email</span>
-                                                <span style="color:blue;" onclick="try{navigator.clipboard.writeText('${da.email}');window.location.href = 'mailto:${da.email}';}catch (err) {console.log('cant copy');}">${da.email}</span>
-                                            </li>
-
-                                            <li>
-                                                <span>Hairstyle</span>
-                                                <span>${da.hairstyle}</span>
-                                            </li>
-                                            <li>
-                                                <span>Price</span>
-                                                <span>${da.price}</span>
-                                            </li>
-                                            <li>
-                                                <span>Date</span>
-                                                <span style="color:green;">${da.date}</span>
-                                            </li>
-                                            <li>
-                                                <span>Time</span>
-                                                <span style="color:green;">${da.time}</span>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                  <div class="modal-footer">
-                                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-danger" id="modalOkBtn_iia">Delete Appointment</button>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>`);
+                            //append receipt
+                            $("body").append(`<div class="modal fade" id="iia" data-bs-backdrop=static data-bs-keyboard=false tabindex="-1" aria-labelledby="iia_Label" aria-hidden="true"><div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="iia_Label">Receipt</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> </div><div class="modal-body"><div class="w-100 "><img class="w-100" style="padding-left:50px;padding-right:50px;" src="https://cocohairsignature.com/img/${da.image}.jpg?a47" /></div><ul class="list-group mt-3 listeceiptul"><li><span>Name</span><span>${da.customername}</span></li><li><span>Phone</span><span style="color:blue;" onclick="try{navigator.clipboard.writeText('${da.phonne}');window.location.href = 'tel:${da.phonne}';}catch (err) {console.log('cant copy');}">${da.phonne}</span></li><li><span>Email</span><span style="color:blue;" onclick="try{navigator.clipboard.writeText('${da.email}');window.location.href = 'mailto:${da.email}';}catch (err) {console.log('cant copy');}">${da.email}</span></li><li><span>Hairstyle</span><span>${da.hairstyle}</span></li><li><span>Price</span><span>${da.price}</span></li><li><span>Date</span><span style="color:green;">${moment(da.date, "YYYYMMDD").format('dddd MMMM Do YYYY')}</span></li><li><span>Time</span><span style="color:green;">${moment(da.time, "HHmm").format('hh:mm A')}</span></li></ul></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button><button type="button" class="btn btn-danger" id="${idr}">Cancel Appointment</button></div></div></div></div>`);
                             $("#iia").modal("show");
+                            $("#" + idr).click(function () {
+                                var propModal = $("#" + modalFuncReturnId({
+                                    title: "Alert",
+                                    body: "Do you want to cancel this appointment?",
+                                    okbtn: "Yes",
+                                    okbtnFunc: function () { 
+                                        $.post(apiC, { cros: 1, deleteAppointment: 2, ksy: dda }, function () {
+                                            var toastIdr = $("#" + toastFuncReturnId("success", "Appointment deleted!", "bg-success") + ">div").toast("show");
+                                            $(propModal).modal("hide");
+                                            $('[data-sh-orderid='+dda+']').remove();
+                                        });
+                                    }
+                                })).modal("show")
 
+                            });
                         });
 
                         
@@ -230,16 +196,7 @@
                                 tt += moment(ttim, "HHmm").format('hh:mm A') + ", ";
                             });
 
-                            overidelist += `
-                                <li class="list-group-item d-flex justify-content-between align-items-center mt-2">
-                                    <div>
-                                        <div><b>Date:</b> ${formattedDate}</div>
-                                        <div><b>Time(s):</b> ${tt}</div>
-                                    </div>
-                                    <button class="btn btn-outline-primary btn-sm" data-overrided-delete="${item.date}">
-                                        <i class="bi bi-trash3"></i>
-                                    </button>
-                                </li>`;
+                            overidelist += `<li class="list-group-item d-flex justify-content-between align-items-center mt-2"><div><div><b>Date:</b> ${formattedDate}</div><div><b>Time(s):</b> ${tt}</div></div><button class="btn btn-outline-primary btn-sm" data-overrided-delete="${item.date}"><i class="bi bi-trash3"></i></button></li>`;
                         }
                     }); overridedListFromPosted = newoverride_overridedListFromPosted;
                 } else {
