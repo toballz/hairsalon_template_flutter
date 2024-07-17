@@ -1,5 +1,5 @@
-!(function (addParam2Url, preventContextMenu, changePage, modalFuncReturnId, toastFuncReturnId) {
-    var apiC = "https://cocohairsignature.com/i/apim.php", overridedListFromPosted = [], overridecalendarDateSelected = "", onlineofflineID = "", today = (new Date()), year = (today.getFullYear()), month = (today.getMonth() + 1), day = (today.getDate()), ttodayDatew = (year + '' + ((month < 10) ? ('0' + month) : month) + '' + ((day < 10) ? ('0' + day) : day))/*yyyymmdd*/
+!(function (addParam2Url, preventContextMenu, changePage, modalFuncReturnId, toastFuncReturnId, websiteDomain) {
+    var  apiC = "https://"+websiteDomain+"/i/apim.php", overridedListFromPosted = [], overridecalendarDateSelected = "", onlineofflineID = "", today = (new Date()), year = (today.getFullYear()), month = (today.getMonth() + 1), day = (today.getDate()), ttodayDatew = (year + '' + ((month < 10) ? ('0' + month) : month) + '' + ((day < 10) ? ('0' + day) : day))/*yyyymmdd*/
     ;
     preventContextMenu();
     function generateDateRanges(e, t, n) { function g(e) { return e.toISOString().split("T")[0] } function l(e, t) { let n = new Date(e); return n.setDate(n.getDate() + t), n } let r = new Date(e), i = new Date(t), u = new Set(n.map(e => new Date(e).getTime())), o = r, a = []; for (; o <= i;)u.has(o.getTime()) || a.push(new Date(o)), o = l(o, 1); let h = [], s = a[0]; for (let _ = 1; _ < a.length; _++)l(a[_ - 1], 1).getTime() !== a[_].getTime() && (h.push([g(s), g(a[_ - 1])]), s = a[_]); return h.push([g(s), g(a[a.length - 1])]), h }
@@ -31,7 +31,7 @@
                             $(".modal.show").modal('hide');
                             $(".modal").remove();
                             //append receipt
-                            $("body").append(`<div class="modal fade" id="iia" data-bs-backdrop=static data-bs-keyboard=false tabindex="-1" aria-labelledby="iia_Label" aria-hidden="true"><div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="iia_Label">Receipt</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> </div><div class="modal-body"><div class="w-100 "><img class="w-100" style="padding-left:50px;padding-right:50px;" src="https://cocohairsignature.com/img/${da.image}.jpg?a47" /></div><ul class="list-group mt-3 listeceiptul"><li><span>Name</span><span>${da.customername}</span></li><li><span>Phone</span><span style="color:blue;" onclick="try{navigator.clipboard.writeText('${da.phonne}');window.location.href = 'tel:${da.phonne}';}catch (err) {console.log('cant copy');}">${da.phonne}</span></li><li><span>Email</span><span style="color:blue;" onclick="try{navigator.clipboard.writeText('${da.email}');window.location.href = 'mailto:${da.email}';}catch (err) {console.log('cant copy');}">${da.email}</span></li><li><span>Hairstyle</span><span>${da.hairstyle}</span></li><li><span>Price</span><span>${da.price}</span></li><li><span>Date</span><span style="color:green;">${moment(da.date, "YYYYMMDD").format('dddd MMMM Do YYYY')}</span></li><li><span>Time</span><span style="color:green;">${moment(da.time, "HHmm").format('hh:mm A')}</span></li></ul></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button><button type="button" class="btn btn-danger" id="${idr}">Cancel Appointment</button></div></div></div></div>`);
+                            $("body").append(`<div class="modal fade" id="iia" data-bs-backdrop=static data-bs-keyboard=false tabindex="-1" aria-labelledby="iia_Label" aria-hidden="true"><div class="modal-dialog modal-dialog-centered modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="iia_Label">Receipt</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button> </div><div class="modal-body"><div class="w-100 "><img class="w-100" style="padding-left:50px;padding-right:50px;" src="https://${websiteDomain}/img/${da.image}.jpg?a47" /></div><ul class="list-group mt-3 listeceiptul"><li><span>Name</span><span>${da.customername}</span></li><li><span>Phone</span><span style="color:blue;" onclick="try{navigator.clipboard.writeText('${da.phonne}');window.location.href = 'tel:${da.phonne}';}catch (err) {console.log('cant copy');}">${da.phonne}</span></li><li><span>Email</span><span style="color:blue;" onclick="try{navigator.clipboard.writeText('${da.email}');window.location.href = 'mailto:${da.email}';}catch (err) {console.log('cant copy');}">${da.email}</span></li><li><span>Hairstyle</span><span>${da.hairstyle}</span></li><li><span>Price</span><span>${da.price}</span></li><li><span>Date</span><span style="color:green;">${moment(da.date, "YYYYMMDD").format('dddd MMMM Do YYYY')}</span></li><li><span>Time</span><span style="color:green;">${moment(da.time, "HHmm").format('hh:mm A')}</span></li></ul></div><div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button><button type="button" class="btn btn-danger" id="${idr}">Cancel Appointment</button></div></div></div></div>`);
                             $("#iia").modal("show");
                             $("#" + idr).click(function () {
                                 var propModal = $("#" + modalFuncReturnId({
@@ -97,7 +97,7 @@
         changePage();
         ///
         //header
-        $("header").html('<nav class="bg-light navbar navbar-expand-lg navbar-light top-navbar"><div class=container-fluid><a class=navbar-brand href="javascript:void(0);">cocohairsignature.com</a> <button aria-controls=navbarNav aria-expanded=false aria-label="Toggle navigation"class=navbar-toggler data-bs-target=#navbarNav data-bs-toggle=collapse type=button><span class=navbar-toggler-icon></span></button><div class="collapse navbar-collapse"id=navbarNav><ul class="mx-auto navbar-nav"><li class=nav-item><a class="nav-link active" href=? aria-current=page>Home</a><li class=nav-item><a class=nav-link href="javascript:void(0);">Features</a><li class=nav-item><a class=nav-link href="javascript:void(0);">Pricing</a><li class=nav-item><a class="nav-link disabled">Disabled</a></ul></div></div></nav>');
+        $("header").html('<nav class="bg-light navbar navbar-expand-lg navbar-light top-navbar"><div class=container-fluid><a class=navbar-brand href="javascript:void(0);">'+websiteDomain+'.com</a> <button aria-controls=navbarNav aria-expanded=false aria-label="Toggle navigation"class=navbar-toggler data-bs-target=#navbarNav data-bs-toggle=collapse type=button><span class=navbar-toggler-icon></span></button><div class="collapse navbar-collapse"id=navbarNav><ul class="mx-auto navbar-nav"><li class=nav-item><a class="nav-link active" href=? aria-current=page>Home</a><li class=nav-item><a class=nav-link href="javascript:void(0);">Features</a><li class=nav-item><a class=nav-link href="javascript:void(0);">Pricing</a><li class=nav-item><a class="nav-link disabled">Disabled</a></ul></div></div></nav>');
         //footer
         $("footer").html('<nav class="bg-light bottom-navbar navbar navbar-light"><div class=container><a class=nav-link href="javascript:void(0);" data-pageswitch=viewappointment><i class="bi bi-house"></i> <span class="d-block navb-fs">Appointments</span> </a><a class=nav-link href="javascript:void(0);" data-pageswitch=schedules><i class="bi bi-calendar4-week"></i> <span class="d-block navb-fs">Availability</span> </a><a class=nav-link href="javascript:void(0);"><i class="bi bi-bar-chart"></i> <span class="d-block navb-fs">Stats</span> </a><a class=nav-link href="javascript:void(0);" data-pageswitch=settings><i class="bi bi-gear"></i> <span class="d-block navb-fs">Settings</span></a></div></nav>');
         //
@@ -260,8 +260,57 @@
 
         //
         //
-        //
+        //login btn
+            $(".btnLoginC").click(function(){ 
+                var emailClass=$("#hhemail"), passwordClass=$("#hhpassword"), emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                     err = false;
 
+                if (!emailPattern.test(emailClass.val().trim())) {
+                    emailClass.css("border",'2px solid red');
+                    err = true; 
+                } else {
+                    emailClass.css("border",'2px solid #7cff7c');
+                }
+
+                if (passwordClass.val().trim().length <= 5) {
+                    passwordClass.css("border",'2px solid red');
+                    err = true; 
+                } else {
+                    passwordClass.css("border",'2px solid #7cff7c');
+                }
+
+
+                if (err != true) {
+                    var emV=btoa(emailClass.val().trim()),pwV=btoa(passwordClass.val().trim());
+                    $.post(apiC,{cros:"getterCross",logine:0,
+                                password:pwV,
+                                email:  emV },
+                        function(da){
+                            if(da.code == 200){
+                                sharparp.push({
+                                title: "trylogin",
+                                value: "/index.php"});
+                            }else{
+                                emailClass.css("border",'2px solid red');
+                                passwordClass.css("border",'2px solid red');
+                            }
+
+                    });
+                }
+
+            });
+            ///
+            //
+            //
+            $(".signoutClick").click(function(){
+                    $.post(apiC,{cros:"getterCross",signlogout:0},
+                        function(da){
+                            
+                            sharparp.push({
+                                title: "setlogout",
+                                value: "/index.php"});
+                    });
+            });
         //
         //
         // //submit updates save add override dates post
@@ -396,7 +445,8 @@
                       </div>
                     </div>`);
         return toastId;
-    }
+    },
+    "cocohairsignature.com"
 
 
 
